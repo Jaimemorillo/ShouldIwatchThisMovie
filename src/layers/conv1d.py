@@ -7,7 +7,7 @@ class MyConv1D(tf.keras.layers.Conv1D):
         self.kernel_size = kernel_size
         self.filters = filters
         self.strides = strides
-        self.acr = act
+        self.act = act
         self.reg = reg
 
         super().__init__(filters,kernel_size)
