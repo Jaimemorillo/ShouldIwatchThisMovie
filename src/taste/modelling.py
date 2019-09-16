@@ -12,6 +12,9 @@ from sklearn.metrics import roc_auc_score
 
 class Modelling:
 
+    def __init__(self):
+        self.model = None
+
     def taste_model(self, max_len, vocab_size, embedding_size, dropout, filters1,
                     filters2, kernel, maxp, gnup, act):
 

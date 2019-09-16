@@ -3,16 +3,20 @@ import pandas as pd
 from nltk import word_tokenize
 from nltk.stem import SnowballStemmer
 import json
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.text import Tokenizer
 
 
 class Processing:
 
-    def __init__(self, path):
+    def __init__(self, stopwords_path, tokenizer_path):
         # It needs a stopwords file to init
-        stop_words = pd.read_csv(path, header=None)
+        stop_words = pd.read_csv(stopwords_path, header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
         self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
+        self.tokenizer = None
+        self.vocab_size = None
 
     def normalize(self, s):
         replacements = (
@@ -102,8 +106,36 @@ class Processing:
         return directors
 
     def paste_cast(self, data):
+
         data['overview'] = data.apply(lambda x: self.get_actors(x['cast']) + ' ' + x['overview'], axis=1)
         data['overview'] = data.apply(lambda x: self.get_director(x['crew']) + x['overview'], axis=1)
 
         return data
 
+    def split_data(self, data ):
+
+        overviews = data['overview'].values
+        y = data['like'].values
+
+        overviews_train, overviews_test, y_train, y_test = train_test_split(overviews, y, test_size=0.15, stratify=y,
+                                                                            random_state=9)
+
+        return overviews_train, overviews_test, y_train, y_test
+
+    def fit_tokenizer(self, overviews_train, num_words):
+        self.tokenizer = Tokenizer(num_words)
+        self.tokenizer.fit_on_texts(overviews_train)
+        # Adding 1 because of reserved 0 index
+        self.vocab_size = len(self.tokenizer.word_index) + 1
+
+    def tokenize_overview(self, overviews, maxlen):
+
+        X = self.tokenizer.texts_to_sequences(overviews)
+        print(len(max(X, key=len)))
+        from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+        # We pad the sentence for the left to fit with maxlen
+        X = pad_sequences(X, padding='pre', maxlen=maxlen)
+        print(X[1])
+
+        return X
