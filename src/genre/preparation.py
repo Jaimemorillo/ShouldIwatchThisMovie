@@ -4,7 +4,6 @@ import glob
 
 class Preparation:
 
-
     def read_csv(self, path):
 
         data = pd.read_csv(path, sep='#', lineterminator='\n')

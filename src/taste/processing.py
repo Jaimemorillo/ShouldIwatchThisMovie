@@ -1,123 +1,109 @@
+import string
 import pandas as pd
-from sklearn.preprocessing import MultiLabelBinarizer
-import tensorflow as tf
-import numpy as np
-from skmultilearn.model_selection import IterativeStratification
+from nltk import word_tokenize
+from nltk.stem import SnowballStemmer
+import json
 
 
 class Processing:
 
-    def clean_overviews(self, df):
+    def __init__(self, path):
+        # It needs a stopwords file to init
+        stop_words = pd.read_csv(path, header=None)
+        stop_words = stop_words[0].tolist() + ['secuela']
+        self.stop_words = stop_words
+        self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
 
-        df = df.dropna(subset=['overview']).reset_index(drop=True)
+    def normalize(self, s):
+        replacements = (
+            ("á", "a"),
+            ("é", "e"),
+            ("í", "i"),
+            ("ó", "o"),
+            ("ú", "u"),
+        )
+        for a, b in replacements:
+            s = s.replace(a, b).replace(a.upper(), b.upper())
 
-        df = df[~df['overview'].str.contains('Recuerda que puedes ver esta película')]
-        df = df[df.overview.str.split().apply(len) > 10].reset_index(drop=True)
+        return s
 
-        df = df[['overview', 'genres']]
+    def clean_sentence(self, x):
+        # Clean sentence from punctuation, numbers and make it lower case
+        x = self.normalize(x.lower())
+        x = x.translate(str.maketrans('', '', string.punctuation))
+        x = x.translate(str.maketrans('', '', '1234567890ªº'))
 
-        return df
+        return x
 
-    def get_overviews_describe(self, df):
+    def delete_stop_words(self, x):
+        # Clean sentence from stopwords
+        words = x.split(' ')
+        words = [word for word in words if word not in self.stop_words]
+        x = str(' '.join(words))
 
-        df['overview'].str.split().apply(len).describe().astype(int)
+        return x
 
-    def clean_genres(self, df):
+    def stem_sentence(self, sentence):
+        # Stem the sentence
+        stemmed_text = [self.stemmer.stem(word) for word in word_tokenize(sentence)]
 
-        def eval_cell(cell):
+        return " ".join(stemmed_text)
 
-            try:
+    def clean_overview(self, data):
+        # Execute the full cleaning process into every overview
+        data['overview'] = data['overview'].apply(lambda x: self.clean_overview(str(x)))
+        data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
+        data['overview'] = data['overview'].apply(lambda x: self.stem_sentence(x))
+        data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
 
-                cell_array = eval(cell)
+        return data
 
-            except:
+    # Get staff and paste to overview
 
-                cell_array = []
+    def get_actors(self, cast):
 
-            return cell_array
+        try:
 
-        def get_genres(cell):
+            json_cast = json.loads(cast)
 
-            cell_array = eval_cell(cell)
+        except:
 
-            if len(cell_array) > 0:
-                ids_list = sorted([v['name'] for v in cell_array])
+            json_cast = cast
 
-            else:
-                ids_list = []
+        if len(json_cast) > 2:
+            up = 3
+        else:
+            up = len(json_cast)
 
-            return ids_list
+        actors = ''
 
-        # Crate Dataframe with ids
-        def create_df_genres(ids, column_name):
+        for i in range(0, up):
+            actor = json_cast[i]['name']
+            actor = self.normalize(actor.replace(' ', '_').lower())
 
-            enc = MultiLabelBinarizer()
-            np_ids = enc.fit_transform(ids)
+            actors = actors + ' ' + actor
 
-            # Save encoder in a pickle
+        return actors
 
-            column_names = []
-            print('Num of ' + column_name + ': ' + str(len(enc.classes_)))
+    def get_director(self, crew):
 
-            for c in enc.classes_:
-                column_names.append(str(c))
+        try:
 
-            df_ids = pd.DataFrame(data=np_ids, index=df.index, columns=column_names)
+            json_crew = json.loads(crew)
 
-            return df_ids
+        except:
 
-        # Merge dataframe ids with data
-        def merge_ids(data, column_name):
+            json_crew = crew
 
-            ids = data[column_name].apply(lambda x: get_genres(x))
+        directors = [member['name'] for member in json_crew if member['job'] == 'Director']
+        directors = [self.normalize(director.replace(' ', '_').lower()) for director in directors]
+        directors = str(' '.join(directors))
 
-            df_ids = create_df_genres(ids, column_name)
+        return directors
 
-            new_df = data.copy()
-            new_df = new_df.join(df_ids)
+    def paste_cast(self, data):
+        data['overview'] = data.apply(lambda x: self.get_actors(x['cast']) + ' ' + x['overview'], axis=1)
+        data['overview'] = data.apply(lambda x: self.get_director(x['crew']) + x['overview'], axis=1)
 
-            return new_df
+        return data
 
-        df = merge_ids(df, 'genres')
-        df['genres'] = df['genres'].apply(lambda x: get_genres(x)).apply(tuple)
-        df = df.drop(['Película de TV'], axis=1)
-
-        # Elimina las peliculas sin genero
-        df['n_genres'] = df.iloc[:, -18:].sum(axis=1)
-        df = df[df['n_genres'] != 0].reset_index(drop=True)
-        df = df.iloc[:, :-1]
-
-        return df
-
-    def get_genres_describe(self, df):
-
-        sum_genres = df.iloc[:, -18:].sum(axis=0).astype(int).sort_values().to_dict()
-
-        vc = df['genres'].value_counts()
-        vc = vc.describe().astype(int)
-
-        return sum_genres, vc
-
-    def cut_sentence(self, df, max_seq_length, train):
-
-        # Create datasets (Only take up to max_seq_length words for memory)
-        X = df['overview'].tolist()
-        X = [' '.join(t.split()[0:max_seq_length]) for t in X]
-        X = np.array(X, dtype=object)[:, np.newaxis]
-
-        if train:
-            y = df.iloc[:, -18:].values
-            return X, y
-
-        return X
-
-    def iterative_train_test_split(self, X, y, test_size):
-
-        stratifier = IterativeStratification(n_splits=2, order=4,
-                                             sample_distribution_per_fold=[test_size, 1.0 - test_size])
-        train_indexes, test_indexes = next(stratifier.split(X, y))
-
-        X_train, y_train = X[train_indexes], y[train_indexes, :]
-        X_test, y_test = X[test_indexes], y[test_indexes, :]
-
-        return X_train, X_test, y_train, y_test

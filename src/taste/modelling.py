@@ -12,8 +12,7 @@ from sklearn.metrics import roc_auc_score
 
 class Modelling:
 
-    @staticmethod
-    def taste_model(max_len, vocab_size, embedding_size, dropout, filters1,
+    def taste_model(self, max_len, vocab_size, embedding_size, dropout, filters1,
                     filters2, kernel, maxp, gnup, act):
 
         words = tf.keras.layers.Input(shape=(max_len,))
@@ -35,14 +34,13 @@ class Modelling:
         pred = MyLayers.my_dense(1, drop)
 
         model = tf.keras.models.Model(inputs=words, outputs=pred)
+        self.model = model
 
         return model
 
-    def train_model(self, max_len, vocab_size, embedding_size, dropout, filters1,
-                    filters2, kernel, maxp, gnup, act, X_train, y_train, X_dev, y_dev):
+    def train_model(self, X_train, y_train, X_dev, y_dev):
 
-        model = self.taste_model(max_len, vocab_size, embedding_size, dropout, filters1,
-                                 filters2, kernel, maxp, gnup, act)
+        model = self.model
 
         model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(lr=0.001),
                       metrics=['accuracy'])
