@@ -12,14 +12,17 @@ from sklearn.metrics import roc_auc_score
 
 class Modelling:
 
-    def __init__(self):
-        self.model = None
+    def __init__(self, max_len, vocab_size, model=None):
 
-    def taste_model(self, max_len, vocab_size, embedding_size, dropout, filters1,
+        self.max_len = max_len
+        self.vocab_size = vocab_size
+        self.model = model
+
+    def taste_model(self, embedding_size, dropout, filters1,
                     filters2, kernel, maxp, gnup, act):
 
-        words = tf.keras.layers.Input(shape=(max_len,))
-        em = tf.keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_size)(words)
+        words = tf.keras.layers.Input(shape=(self.max_len,))
+        em = tf.keras.layers.Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
         em = tf.keras.layers.SpatialDropout1D(dropout)(em)
 
         c = MyLayers.my_conv1d(1, em, filters=filters1, act=act)
@@ -41,7 +44,7 @@ class Modelling:
 
         return model
 
-    def train_model(self, X_train, y_train, X_dev, y_dev):
+    def fit_model(self, X_train, y_train, X_dev, y_dev):
 
         model = self.model
 

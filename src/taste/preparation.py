@@ -11,7 +11,7 @@ class Preparation:
 
     def read_csv(self, path):
 
-        data = pd.read_csv(path, sep='#', lineterminator='\n')
+        data = pd.read_csv(path, sep='#', lineterminator='\n', encoding='utf-8')
 
         return data
 
@@ -29,6 +29,9 @@ class Preparation:
         taste = taste[~taste['id'].str.contains('/')]
         taste['id'] = taste['id'].astype(int)
 
+        taste = taste.dropna(subset=['like'])
+        taste['like'] = taste['like'].astype(int)
+
         return taste
 
     def get_credits(self, credits_path):
@@ -39,7 +42,7 @@ class Preparation:
 
         return movie_credits
 
-    def merge_data(self, over, taste, movie_credits):
+    def merge_over_taste_credits(self, over, taste, movie_credits):
 
         data = taste.merge(over[['id', 'overview']], left_on='id', right_on='id')
         data = data.merge(movie_credits[['movie_id', 'cast', 'crew']], left_on='id', right_on='movie_id')

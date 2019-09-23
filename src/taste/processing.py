@@ -1,5 +1,6 @@
 import string
 import pandas as pd
+import nltk
 from nltk import word_tokenize
 from nltk.stem import SnowballStemmer
 import json
@@ -9,14 +10,21 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 
 class Processing:
 
-    def __init__(self, stopwords_path, tokenizer_path):
+    def __init__(self, stopwords_path, tokenizer_path=None):
         # It needs a stopwords file to init
         stop_words = pd.read_csv(stopwords_path, header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
-        self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
-        self.tokenizer = None
-        self.vocab_size = None
+
+        try:
+            self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
+        except:
+            nltk.download("popular")
+            self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
+
+        if tokenizer_path is not None:
+            self.tokenizer = None
+            self.vocab_size = None
 
     def normalize(self, s):
         replacements = (
@@ -55,10 +63,11 @@ class Processing:
 
     def clean_overview(self, data):
         # Execute the full cleaning process into every overview
-        data['overview'] = data['overview'].apply(lambda x: self.clean_overview(str(x)))
+        data['overview'] = data['overview'].apply(lambda x: self.clean_sentence(str(x)))
         data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
         data['overview'] = data['overview'].apply(lambda x: self.stem_sentence(x))
         data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
+        data = data.drop(['Unnamed: 0'], axis=1)
 
         return data
 
@@ -112,7 +121,7 @@ class Processing:
 
         return data
 
-    def split_data(self, data ):
+    def split_data(self, data):
 
         overviews = data['overview'].values
         y = data['like'].values
@@ -139,3 +148,6 @@ class Processing:
         print(X[1])
 
         return X
+
+    def get_vocab_size(self):
+        return self.vocab_size
