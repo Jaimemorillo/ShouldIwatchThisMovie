@@ -8,6 +8,7 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
+from tensorflow.python.client import device_lib
 
 
 class Modelling:
@@ -44,17 +45,26 @@ class Modelling:
 
         return model
 
+    def get_available_gpus(self):
+        local_device = device_lib.list_local_devices()
+        return [x.name for x in local_device if x.device_type == 'GPU']
+
     def fit_model(self, X_train, y_train, X_dev, y_dev):
+        # Fit model just can be use with gpu
+        gpus = self.get_available_gpus()
+        if len(gpus) < 1:
+            print("No gpu is available")
 
-        model = self.model
+        else:
+            model = self.model
 
-        model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(lr=0.001),
-                      metrics=['accuracy'])
+            model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(lr=0.001),
+                          metrics=['accuracy'])
 
-        model.fit(X_train, y_train, epochs=150, verbose=True,
-                  validation_data=(X_dev, y_dev), batch_size=64)
+            model.fit(X_train, y_train, epochs=150, verbose=True,
+                      validation_data=(X_dev, y_dev), batch_size=64)
 
-        self.model = model
+            self.model = model
 
     def predict(self, X_test):
         y_score = self.model.predict(X_test, verbose=1)
