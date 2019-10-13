@@ -1,48 +1,33 @@
 import sys
-import os
-sys.path.extend('../src')
+sys.path.append('app')
+sys.path.append('../src')
 
-from flask import Flask, render_template, url_for, request
-import pandas as pd 
-import pickle
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.externals import joblib
-from taste.preparation import Preparation
-from movies.movie import Movie
+from flask import Flask, render_template, url_for, request, abort
 
-pre = Preparation()
-overs = pre.get_overview('../data/tmdb_spanish_overview.csv')
+from controller.controller import Controller
+path = '../data/tmdb_spanish_overview.csv'
 
-movies = overs[0:4]
+ctrl = Controller(path)
+movies = ctrl.get_4_random_movies()
 
 app = Flask(__name__)
-
-movies = {
-	0: {
-		'title': movies['title'][0],
-		'prediction': '70'
-	},
-	1: {
-		'title': movies['title'][1],
-		'prediction': '80'
-	},
-	2: {
-		'title': movies['title'][2],
-		'prediction': '90'
-	},
-	3: {
-		'title': movies['title'][3],
-		'prediction': '50'
-	}
-}
 
 
 @app.route('/')
 @app.route('/home')
-def home(film="it"):
-	return render_template('index.html', movies=movies)
+def home():
+    return render_template('home.html', movies=movies)
+
+
+@app.route('/movie/<id>')
+def movie(id):
+    try:
+        title, overview, prediction = movies.get_by_id(id)
+        print(title)
+        return render_template('movie.html', title=title, overview=overview, prediction=prediction)
+    except:
+        abort(404)
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)
