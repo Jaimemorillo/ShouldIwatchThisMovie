@@ -16,15 +16,13 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('home.html', movies=movies)
+    return render_template('home.html', ids=movies.ids, movies=movies)
 
 
 @app.route('/movie/<id>')
 def movie(id):
     try:
-        title, overview, prediction = movies.get_by_id(id)
-        print(title)
-        return render_template('movie.html', title=title, overview=overview, prediction=prediction)
+        return render_template('movie.html', id=int(id), movies=movies)
     except:
         abort(404)
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card ">
+    <div class="row">
+        <img class="card-img-top col-lg-3 col-md-5 my-3 ml-3" src="http://placehold.it/100x150" alt="">
+        <div class="card-body col-lg-8 col-md-6 my-5 mx-3">
+            <h4 class="card-title text-center"> {{ movies.titles.get(id) }} </h4>
+            <p class="card-text ">{{ movies.overviews.get(id) }}</p>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        <div class="card my-3">
+            {{ movies.predictions.get(id) }}
+        </div>
+        <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
+            <i class="fas fa-thumbs-up"></i>
+        </a>
+        <a href="#" class="btn btn-primary  col-lg-3 col-md-4 btn-sm">
+            <i class="fas fa-thumbs-down"></i>
+        </a>
+    </div>
+</div>
+
+
+{% endblock %}

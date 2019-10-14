@@ -5,12 +5,12 @@
         <div class="card h-100">
             <img class="card-img-top" src="http://placehold.it/500x450" alt="">
             <div class="card-body">
-                <h4 class="card-title text-center"> {{ movies.titles[0] }} {{ movies.ids[0] }}</h4>
-                <p class="card-text ">{{ movies.reduced_overviews[0] }}</p>
+                <h4 class="card-title text-center"> {{ movies.titles.get(ids[0]) }} {{ ids[0] }}</h4>
+                <p class="card-text ">{{ movies.reduced_overviews.get(ids[0]) }}</p>
             </div>
             <div class="card-footer text-center">
                 <div class="card my-3">
-                    {{ movies.predictions[0] }}
+                    {{ movies.predictions.get(ids[0]) }}
                 </div>
                 <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
                     <i class="fas fa-thumbs-up"></i>
@@ -26,12 +26,12 @@
         <div class="card h-100">
             <img class="card-img-top" src="http://placehold.it/500x450" alt="">
             <div class="card-body">
-                <h4 class="card-title text-center">{{ movies.titles[1] }}</h4>
-                <p class="card-text">{{ movies.reduced_overviews[1] }}</p>
+                <h4 class="card-title text-center">{{ movies.titles.get(ids[1]) }}</h4>
+                <p class="card-text">{{ movies.reduced_overviews.get(ids[1]) }}</p>
             </div>
             <div class="card-footer text-center">
                 <div class="card my-3">
-                    {{ movies.predictions[1] }}
+                    {{ movies.predictions.get(ids[1]) }}
                 </div>
                 <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
                     <i class="fas fa-thumbs-up"></i>
@@ -47,12 +47,12 @@
         <div class="card h-100">
             <img class="card-img-top" src="http://placehold.it/500x450" alt="">
             <div class="card-body">
-                <h4 class="card-title text-center">{{ movies.titles[2] }}</h4>
-                <p class="card-text">{{ movies.reduced_overviews[2] }}</p>
+                <h4 class="card-title text-center">{{ movies.titles.get(ids[2]) }}</h4>
+                <p class="card-text">{{ movies.reduced_overviews.get(ids[2]) }}</p>
             </div>
             <div class="card-footer text-center">
                 <div class="card my-3">
-                    {{ movies.predictions[2] }}
+                    {{ movies.predictions.get(ids[2]) }}
                 </div>
                 <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
                     <i class="fas fa-thumbs-up"></i>
@@ -68,12 +68,12 @@
         <div class="card h-100">
             <img class="card-img-top" src="http://placehold.it/500x450" alt="">
             <div class="card-body">
-                <h4 class="card-title text-center">{{ movies.titles[3] }}</h4>
-                <p class="card-text">{{ movies.reduced_overviews[3] }}</p>
+                <h4 class="card-title text-center">{{ movies.titles.get(ids[3]) }}</h4>
+                <p class="card-text">{{ movies.reduced_overviews.get(ids[3]) }}</p>
             </div>
             <div class="card-footer text-center">
                 <div class="card my-3">
-                    {{ movies.predictions[3] }}
+                    {{ movies.predictions.get(ids[3]) }}
                 </div>
                 <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
                     <i class="fas fa-thumbs-up"></i>

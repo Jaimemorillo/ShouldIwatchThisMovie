@@ -1,13 +1,14 @@
 import numpy as np
 
+
 class Movies:
 
     def __init__(self, ids, titles, overviews):
         self.__ids = ids
-        self.__titles = titles
-        self.__overviews = overviews
-        self.__reduced_overviews = [" ".join(s.split()[0:30] + ['...']) for s in overviews]
-        self.__predictions = [80 for i in titles]
+        self.__titles = dict(zip(ids, titles))
+        self.__overviews = dict(zip(ids, overviews))
+        self.__reduced_overviews = dict(zip(ids, [" ".join(s.split()[0:30] + ['...']) for s in overviews]))
+        self.__predictions = dict(zip(ids, [80 for i in titles]))
         self.__tastes = None
 
     @property
@@ -55,11 +56,7 @@ class Movies:
         self.__predictions = val
 
     def get_by_id(self, id):
-        index = np.where(self.ids == id)[0][0]
-        print(index)
-        title = self.titles[index]
-        print(title)
-        overview = self.overviews[index]
-        prediction = self.predictions[index]
+        title = self.titles.get(id)
+        overview = self.overviews.get(id)
+        prediction = self.predictions.get(id)
         return title, overview, prediction
-
