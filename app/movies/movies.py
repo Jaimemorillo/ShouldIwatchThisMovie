@@ -9,7 +9,7 @@ class Movies:
         self.__overviews = dict(zip(ids, overviews))
         self.__reduced_overviews = dict(zip(ids, [" ".join(s.split()[0:30] + ['...']) for s in overviews]))
         self.__predictions = dict(zip(ids, [80 for i in titles]))
-        self.__tastes = None
+        self.__tastes = dict(zip(ids, [None for i in titles]))
 
     @property
     def ids(self):

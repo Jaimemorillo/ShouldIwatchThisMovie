@@ -12,6 +12,10 @@ class Preparation:
     def read_csv(self, path):
 
         data = pd.read_csv(path, sep='#', lineterminator='\n', encoding='utf-8')
+        data.set_index('id', inplace=True)
+        data.dropna(subset=['title', 'overview'], inplace=True)
+
+        data['id'] = data.index
 
         return data
 
