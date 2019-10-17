@@ -10,19 +10,28 @@
                 <h4 class="card-title text-center">{{ movies.title[ids[0]] }}</h4>
                 <p class="card-text">{{ movies.reduced_overview[ids[0]] }}</p>
             </div>
-            <div class="card-footer text-center mt-auto">
-                <div class="card my-3">
-                    {{ movies.prediction[ids[0]] }}
-                </div>
-                <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-up"></i>
-                </a>
-                <a href="#" class="btn btn-primary  col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-down"></i>
-                </a>
-            </div>
         </a>
+        <div class="card-footer text-center mt-auto">
+            <div class="card mt-2 mb-3">
+                {{ movies.prediction[ids[0]] }}
+            </div>
+            <div class="row text-justify ml-4">
+                    <form action="/movie/{{ids[0]}}" method="POST" class="mr-2">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+ 
+                    <form action="/movie/{{ids[0]}}" method="POST" class="ml-3">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="0">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+            </div>
+        </div>
     </div>
+
+
 
     <div class="card">
         <a href="{{ url_for('movie', id=ids[1]) }}" class="text-dark card-link">
@@ -31,19 +40,27 @@
                 <h4 class="card-title text-center">{{ movies.title[ids[1]] }}</h4>
                 <p class="card-text">{{ movies.reduced_overview[ids[1]] }}</p>
             </div>
-            <div class="card-footer text-center mt-auto">
-                <div class="card my-3">
-                    {{ movies.prediction[ids[1]] }}
-                </div>
-                <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-up"></i>
-                </a>
-                <a href="#" class="btn btn-primary  col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-down"></i>
-                </a>
-            </div>
         </a>
+        <div class="card-footer text-center mt-auto">
+            <div class="card mt-2 mb-3">
+                {{ movies.prediction[ids[1]] }}
+            </div>
+            <div class="row text-justify ml-4">
+                    <form action="/movie/{{ids[1]}}" method="POST" class="mr-2">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+ 
+                    <form action="/movie/{{ids[1]}}" method="POST" class="ml-3">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="0">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+            </div>
+        </div>
     </div>
+
 
     <div class="card">
         <a href="{{ url_for('movie', id=ids[2]) }}" class="text-dark card-link">
@@ -52,19 +69,27 @@
                 <h4 class="card-title text-center">{{ movies.title[ids[2]] }}</h4>
                 <p class="card-text">{{ movies.reduced_overview[ids[2]] }}</p>
             </div>
-            <div class="card-footer text-center mt-auto">
-                <div class="card my-3">
-                    {{ movies.prediction[ids[2]] }}
-                </div>
-                <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-up"></i>
-                </a>
-                <a href="#" class="btn btn-primary  col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-down"></i>
-                </a>
-            </div>
         </a>
+        <div class="card-footer text-center mt-auto">
+            <div class="card mt-2 mb-3">
+                {{ movies.prediction[ids[2]] }}
+            </div>
+            <div class="row text-justify ml-4">
+                    <form action="/movie/{{ids[2]}}" method="POST" class="mr-2">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+ 
+                    <form action="/movie/{{ids[2]}}" method="POST" class="ml-3">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="0">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+            </div>
+        </div>
     </div>
+
 
     <div class="card">
         <a href="{{ url_for('movie', id=ids[3]) }}" class="text-dark card-link">
@@ -73,19 +98,27 @@
                 <h4 class="card-title text-center">{{ movies.title[ids[3]] }}</h4>
                 <p class="card-text">{{ movies.reduced_overview[ids[3]] }}</p>
             </div>
-            <div class="card-footer text-center mt-auto">
-                <div class="card my-3">
-                    {{ movies.prediction[ids[3]] }}
-                </div>
-                <a href="#" class="btn btn-primary col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-up"></i>
-                </a>
-                <a href="#" class="btn btn-primary  col-lg-3 col-md-4 btn-sm">
-                    <i class="fas fa-thumbs-down"></i>
-                </a>
-            </div>
         </a>
+        <div class="card-footer text-center mt-auto">
+            <div class="card mt-2 mb-3">
+                {{ movies.prediction[ids[3]] }}
+            </div>
+            <div class="row text-justify ml-4">
+                    <form action="/movie/{{ids[3]}}" method="POST" class="mr-2">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+ 
+                    <form action="/movie/{{ids[3]}}" method="POST" class="ml-3">
+                        <button class="btn btn-primary btn-sm px-4" type="submit" name="taste" value="0">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </form>
+            </div>
+        </div>
     </div>
+
 
 </div>
 

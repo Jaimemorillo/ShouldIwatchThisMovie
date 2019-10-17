@@ -20,24 +20,21 @@ def home():
 
 
 # Movie page
-@app.route('/movie/<id>')
+@app.route('/movie/<id>', methods=['GET', 'POST'])
 def movie(id):
-    id = int(id)
-    if movies.title.get(id) is not None:
-        return render_template('movie.html', id=id, movies=movies)
-    else:
-        abort(404)
+    if request.method == 'GET':
+        id = int(id)
+        if movies.title.get(id) is not None:
+            return render_template('movie.html', id=id, movies=movies)
+        else:
+            abort(404)
 
-# Give like
-@app.route('/movie/<id>/<l>', methods=['POST'])
-def like(id, l):
-    id = int(id)
-    l = int(l)
-
-    if l in [0, 1]:
-        movies.taste[id] = l
-
-    return None
+    if request.method == 'POST':
+        id = int(id)
+        value = request.form['taste']
+        movies['taste'][id] = value
+        print(movies.taste)
+        return render_template('home.html', ids=ids, movies=movies)
 
 
 if __name__ == '__main__':
