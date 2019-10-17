@@ -1,8 +1,9 @@
 import sys
+import numpy as np
 sys.path.append('app')
 sys.path.append('../src')
 
-from flask import Flask, render_template, url_for, request, abort
+from flask import Flask, render_template, url_for, request, abort, redirect
 
 from controller.controller import DBController
 path = '../data/tmdb_spanish_overview.csv'
@@ -30,11 +31,26 @@ def movie(id):
             abort(404)
 
     if request.method == 'POST':
+        # set taste of movie
         id = int(id)
-        value = request.form['taste']
-        movies['taste'][id] = value
-        print(movies.taste)
-        return render_template('home.html', ids=ids, movies=movies)
+
+        def set_taste(key, page):
+            value = request.form[key]
+            value = int(value)
+
+            if movies['taste'][id] == value:
+                movies['taste'][id] = np.nan
+            else:
+                movies['taste'][id] = value
+
+            print(movies.taste)
+            return redirect(page)
+
+        if request.form.get("taste") is not None:
+            return set_taste('taste', '/home')
+
+        else:
+            return set_taste('taste2', '/movie/' + str(id))
 
 
 if __name__ == '__main__':
