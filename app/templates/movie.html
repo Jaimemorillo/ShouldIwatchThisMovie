@@ -14,16 +14,16 @@
         <div class="card my-3">
             {{ movies.prediction[id] }}
         </div>
-        <div class="row text-justify ml-4">
+        <div class="row text-justify ml-5">
             <div class="col-lg-4 col-md-2"></div>
             <form action="/movie/{{id}}" method="POST" class="mr-4">
-                <button class="btn btn-primary btn-md px-5" type="submit" name="taste2" value="1">
+                <button class="btn btn-primary btn-md px-5" type="submit" name="like2" value="1">
                     <i class="fas fa-thumbs-up"></i>
                 </button>
             </form>
 
             <form action="/movie/{{id}}" method="POST" class="ml-5">
-                <button class="btn btn-primary btn-md px-5" type="submit" name="taste2" value="0">
+                <button class="btn btn-primary btn-md px-5" type="submit" name="like2" value="0">
                     <i class="fas fa-thumbs-up"></i>
                 </button>
             </form>

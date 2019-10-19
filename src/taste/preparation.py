@@ -12,8 +12,14 @@ class Preparation:
     def read_csv(self, path):
 
         data = pd.read_csv(path, sep='#', lineterminator='\n', encoding='utf-8')
+
+        # Clean ids
+        data.dropna(subset=['id'], inplace=True)
+        data['id'] = data['id'].astype(str)
+        data = data[~data['id'].str.contains('/')]
+        data['id'] = data['id'].astype(int)
+
         data.set_index('id', inplace=True)
-        data.dropna(subset=['title', 'overview'], inplace=True)
 
         data['id'] = data.index
 
@@ -22,19 +28,17 @@ class Preparation:
     def get_overview(self, over_path):
 
         over = self.read_csv(over_path)
+        over.dropna(subset=['title', 'overview'], inplace=True)
 
         return over
 
-    def get_personal_taste(self, taste_path):
+    def get_personal_like(self, taste_path):
 
         taste = self.read_csv(taste_path)
 
-        # Clean csv
-        taste = taste[~taste['id'].str.contains('/')]
-        taste['id'] = taste['id'].astype(int)
-
         taste = taste.dropna(subset=['like'])
         taste['like'] = taste['like'].astype(int)
+        taste = taste[['id', 'like']]
 
         return taste
 
@@ -46,9 +50,9 @@ class Preparation:
 
         return movie_credits
 
-    def merge_over_taste_credits(self, over, taste, movie_credits):
+    def merge_over_like_credits(self, over, like, movie_credits):
 
-        data = taste.merge(over[['id', 'overview']], left_on='id', right_on='id')
+        data = like.merge(over[['id', 'overview']], left_on='id', right_on='id')
         data = data.merge(movie_credits[['movie_id', 'cast', 'crew']], left_on='id', right_on='movie_id')
         data.drop(['movie_id'], axis=1, inplace=True)
 
