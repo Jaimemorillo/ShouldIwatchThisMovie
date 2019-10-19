@@ -8,7 +8,7 @@ from flask import Flask, render_template, url_for, request, abort, redirect
 from controller.controller import DBController
 path = '../data/'
 
-db_ctrl = DBController(path)
+db_ctrl = DBController()
 
 app = Flask(__name__)
 
@@ -21,7 +21,7 @@ def home():
                                ids=db_ctrl.sample.index.values, movies=db_ctrl.sample)
 
     elif request.method == 'POST':
-        db_ctrl.update()
+        db_ctrl.update_sample()
         return render_template('home.html',
                                ids=db_ctrl.sample.index.values, movies=db_ctrl.sample)
 

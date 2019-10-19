@@ -8,9 +8,11 @@ class DBController:
         self.pre = Preparation()
         self.path = data_path
         self.__db_ini = self.load_ini_db()
-        self.__db_act = self.db_ini.copy()
         self.__db_like = self.load_like_db()
+        self.__db_act = self.db_ini[~self.db_ini.index.isin(self.db_like.index)].copy()
         self.__sample = self.get_4_random_movies()
+        self.__db_credits = self.load_credits_db()
+        self.__db_full_data = None
 
     @property
     def db_ini(self):
@@ -25,8 +27,16 @@ class DBController:
         return self.__db_like
 
     @property
+    def db_credits(self):
+        return self.__db_credits
+
+    @property
     def sample(self):
         return self.__sample
+
+    @property
+    def db_full_data(self):
+        return self.__db_full_data
 
     @db_ini.setter
     def db_ini(self, val):
@@ -40,9 +50,17 @@ class DBController:
     def db_like(self, val):
         self.__db_like = val
 
+    @db_credits.setter
+    def db_credits(self, val):
+        self.__db_credits = val
+
     @sample.setter
     def sample(self, val):
         self.__sample = val
+
+    @db_full_data.setter
+    def db_full_data(self, val):
+        self.__db_full_data = val
 
     def load_ini_db(self):
         movies_ini = self.pre.get_overview(self.path + 'tmdb_spanish_overview.csv')
@@ -61,6 +79,17 @@ class DBController:
 
         return like_ini
 
+    def load_credits_db(self):
+        credits_ini = self.pre.get_credits(self.path + 'tmdb_5000_credits.csv')
+
+        return credits_ini
+
+    def merge_full_data(self):
+        data = self.pre.merge_over_like_credits(self.db_ini, self.db_like, self.db_credits)
+        self.db_full_data = data
+
+        return None
+
     def get_4_random_movies(self):
         sample = self.db_act.sample(4)
 
@@ -69,7 +98,7 @@ class DBController:
 
         return sample
 
-    def update(self):
+    def update_sample(self):
 
         m_with_like = self.sample[self.sample['like'].notna()]
 

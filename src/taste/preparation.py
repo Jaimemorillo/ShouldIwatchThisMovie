@@ -45,8 +45,10 @@ class Preparation:
     def get_credits(self, credits_path):
 
         movie_credits = self.read_csv(credits_path)
+        movie_credits.rename(columns={'id': 'movie_id'}, inplace=True)
 
         movie_credits['movie_id'] = movie_credits['movie_id'].astype(int)
+        movie_credits = movie_credits[['movie_id', 'cast', 'crew']]
 
         return movie_credits
 
