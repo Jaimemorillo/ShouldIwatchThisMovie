@@ -5,10 +5,10 @@ sys.path.append('../src')
 
 from flask import Flask, render_template, url_for, request, abort, redirect
 
-from controller.controller import DBController
+from controller.app_controller import DBAppController
 path = '../data/'
 
-db_ctrl = DBController()
+db_ctrl = DBAppController(path)
 
 app = Flask(__name__)
 

@@ -56,7 +56,7 @@ taste = taste[~taste['id'].str.contains('/')]
 taste['id'] = taste['id'].astype(int)
 credits['movie_id'] = credits['movie_id'].astype(int)
 
-# Merge taste and credits
+# Merge like and credits
 
 data = taste.merge(dataover[['id', 'overview']], left_on='id', right_on='id')
 data = data.merge(credits[['movie_id', 'cast', 'crew']],

@@ -15,6 +15,8 @@ class Processing:
         stop_words = pd.read_csv(stopwords_path, header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
+        self.tokenizer = None
+        self.__vocab_size = None
 
         try:
             self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
@@ -23,8 +25,13 @@ class Processing:
             self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
 
         if tokenizer_path is not None:
+            # Habria que cargar el tokenizer guardado y su vocab_size
             self.tokenizer = None
             self.vocab_size = None
+
+    @property
+    def vocab_size(self):
+        return self.__vocab_size
 
     def normalize(self, s):
         replacements = (
@@ -67,7 +74,6 @@ class Processing:
         data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
         data['overview'] = data['overview'].apply(lambda x: self.stem_sentence(x))
         data['overview'] = data['overview'].apply(lambda x: self.delete_stop_words(x))
-        data = data.drop(['Unnamed: 0'], axis=1)
 
         return data
 
@@ -121,6 +127,7 @@ class Processing:
 
         return data
 
+    # Split train_test
     def split_data(self, data):
 
         overviews = data['overview'].values
@@ -137,17 +144,41 @@ class Processing:
         # Adding 1 because of reserved 0 index
         self.vocab_size = len(self.tokenizer.word_index) + 1
 
-    def tokenize_overview(self, overviews, maxlen):
+    def tokenize_overview(self, overviews, max_len):
 
         X = self.tokenizer.texts_to_sequences(overviews)
         print(len(max(X, key=len)))
         from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-        # We pad the sentence for the left to fit with maxlen
-        X = pad_sequences(X, padding='pre', maxlen=maxlen)
+        # We pad the sentence for the left to fit with max_len
+        X = pad_sequences(X, padding='pre', maxlen=max_len)
         print(X[1])
 
         return X
 
-    def get_vocab_size(self):
-        return self.vocab_size
+    def process(self, data, train):
+
+        n_words = 12000
+        max_len = 100
+
+        df = self.clean_overview(data)
+        df = self.paste_cast(df)
+
+        if train:
+
+            X_train, X_test, y_train, y_test = self.split_data(df)
+
+            self.fit_tokenizer(X_train, n_words)
+            X_train = self.tokenize_overview(X_train, max_len)
+            X_test = self.tokenize_overview(X_test, max_len)
+
+            return X_train, X_test
+
+        else:
+
+            X = df['overview'].values
+            X = self.tokenize_overview(X, max_len)
+
+            return X
+
+

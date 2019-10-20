@@ -32,36 +32,42 @@ class Preparation:
 
         return over
 
-    def get_personal_like(self, taste_path):
+    def get_personal_like(self, like_path):
 
-        taste = self.read_csv(taste_path)
+        like = self.read_csv(like_path)
 
-        taste = taste.dropna(subset=['like'])
-        taste['like'] = taste['like'].astype(int)
-        taste = taste[['id', 'like']]
+        like = like.dropna(subset=['like'])
+        like['like'] = like['like'].astype(int)
+        like = like[['id', 'like']]
 
-        return taste
+        return like
 
     def get_credits(self, credits_path):
 
         movie_credits = self.read_csv(credits_path)
-        movie_credits.rename(columns={'id': 'movie_id'}, inplace=True)
-
-        movie_credits['movie_id'] = movie_credits['movie_id'].astype(int)
-        movie_credits = movie_credits[['movie_id', 'cast', 'crew']]
+        movie_credits = movie_credits[['id', 'cast', 'crew']]
 
         return movie_credits
 
+    def merge_over_credits(self, over, movie_credits):
+
+        data = over[['id', 'title', 'overview',
+                     'reduced_overview', 'prediction', 'like']]
+        data = data.merge(movie_credits[['cast', 'crew']], left_index=True, right_index=True)
+
+        return data
+
+
     def merge_over_like_credits(self, over, like, movie_credits):
 
-        data = like.merge(over[['id', 'overview']], left_on='id', right_on='id')
-        data = data.merge(movie_credits[['movie_id', 'cast', 'crew']], left_on='id', right_on='movie_id')
-        data.drop(['movie_id'], axis=1, inplace=True)
+        data = self.merge_over_credits(over, movie_credits)
+        data = data.drop(['like'], axis=1).merge(like.drop(['id'], axis=1),
+                                                 left_index=True, right_index=True)
 
         # Clean  empty
         data = data[~pd.isna(data.overview)]
-        data['like'] = data['like'].astype(int)
-        data.reset_index(inplace=True, drop=True)
+        # data['like'] = data['like'].astype(int)
+        # data.reset_index(inplace=True, drop=True)
 
         return data
 
