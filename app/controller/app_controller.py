@@ -6,10 +6,10 @@ import pandas as pd
 
 class DBAppController:
 
-    def __init__(self, data_path='data/'):
+    def __init__(self, data_path='data/', models_path='models/'):
 
         self.pre = Preparation()
-        # self.pro = Processing()
+        self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path)
         self.path = data_path
         self.db_ini = self.load_ini_db()
         self.db_like_ini = self.load_like_db()
@@ -70,7 +70,8 @@ class DBAppController:
         sample = self.pre.merge_over_credits(sample, self.db_credits)
 
         # Hacemos las predicciones
-        # X = self.pro.process(sample)
+        X = self.pro.process(data=sample, train=False)
+        # print(len(X))
 
         return sample
 

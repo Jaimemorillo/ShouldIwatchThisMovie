@@ -6,17 +6,16 @@ from nltk.stem import SnowballStemmer
 import json
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.text import Tokenizer
+import pickle
 
 
 class Processing:
 
-    def __init__(self, stopwords_path, tokenizer_path=None):
+    def __init__(self, stopwords_path='data/', tokenizer_path='models/'):
         # It needs a stopwords file to init
-        stop_words = pd.read_csv(stopwords_path, header=None)
+        stop_words = pd.read_csv(stopwords_path + 'stopwords-es.txt', header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
-        self.tokenizer = None
-        self.__vocab_size = None
 
         try:
             self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
@@ -24,10 +23,10 @@ class Processing:
             nltk.download("popular")
             self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
 
-        if tokenizer_path is not None:
-            # Habria que cargar el tokenizer guardado y su vocab_size
-            self.tokenizer = None
-            self.vocab_size = None
+        # loading
+        with open(tokenizer_path + 'tokenizer.pickle', 'rb') as handle:
+            self.tokenizer = pickle.load(handle)
+        self.__vocab_size = len(self.tokenizer.word_index) + 1
 
     @property
     def vocab_size(self):
@@ -147,12 +146,12 @@ class Processing:
     def tokenize_overview(self, overviews, max_len):
 
         X = self.tokenizer.texts_to_sequences(overviews)
-        print(len(max(X, key=len)))
+        # print(len(max(X, key=len)))
         from tensorflow.keras.preprocessing.sequence import pad_sequences
 
         # We pad the sentence for the left to fit with max_len
         X = pad_sequences(X, padding='pre', maxlen=max_len)
-        print(X[1])
+        # print(X[1])
 
         return X
 

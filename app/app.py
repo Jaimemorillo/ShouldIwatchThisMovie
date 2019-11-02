@@ -6,9 +6,11 @@ sys.path.append('../src')
 from flask import Flask, render_template, url_for, request, abort, redirect
 
 from controller.app_controller import DBAppController
-path = '../data/'
+data_path = '../data/'
+models_path = '../models/'
 
-db_ctrl = DBAppController(path)
+# db_ctrl = DBAppController()
+db_ctrl = DBAppController(data_path, models_path)
 
 app = Flask(__name__)
 
