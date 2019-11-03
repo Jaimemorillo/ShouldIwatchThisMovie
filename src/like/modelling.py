@@ -26,6 +26,7 @@ class Modelling:
                                          kernel=3, maxp=2, gnup=32, neurons=8,
                                          act='gelu')
         self.model.load_weights(model_path + 'my_model_movie_like.h5')
+        self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     def like_model_gpu(self, embedding_size, dropout, filters, kernel, maxp, gnup, neurons, act):
         words = Input(shape=(self.max_len,))
@@ -74,26 +75,12 @@ class Modelling:
         local_device = device_lib.list_local_devices()
         return [x.name for x in local_device if x.device_type == 'GPU']
 
-    def fit_model(self, X_train, y_train, X_dev, y_dev):
-        # Fit model just can be use with gpu
-        gpus = self.get_available_gpus()
-        if len(gpus) < 1:
-            print("No gpu is available")
+    def fit_model(self, X_train, y_train, epochs, batch_size):
 
-        else:
-            model = self.model
-
-            model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(lr=0.001),
-                          metrics=['accuracy'])
-
-            model.fit(X_train, y_train, epochs=150, verbose=True,
-                      validation_data=(X_dev, y_dev), batch_size=64)
-
-            self.model = model
+        self.model.fit(X_train, y_train, epochs=epochs, verbose=True, batch_size=batch_size)
 
     def predict(self, X_test):
-        print("Dentro modelo \n")
-        print(X_test)
+
         y_score = self.model.predict(X_test, verbose=1)
         threshold = 0.5
 

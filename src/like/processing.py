@@ -157,12 +157,12 @@ class Processing:
 
         return X
 
-    def process(self, data, train):
+    def process(self, data, train_dev):
 
         df = self.clean_overview(data)
         df = self.paste_cast(df)
 
-        if train:
+        if train_dev:
 
             X_train, X_test, y_train, y_test = self.split_data(df)
 

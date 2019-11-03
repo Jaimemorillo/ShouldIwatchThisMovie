@@ -20,7 +20,6 @@ class DBAppController:
         self.db_act = self.db_ini[~self.db_ini.index.isin(self.db_like_ini.index)].copy()
         self.db_credits = self.load_credits_db()
         self.__sample = self.get_4_random_movies()
-        self.db_train_data = None
 
     @property
     def sample(self):
@@ -58,24 +57,22 @@ class DBAppController:
     def merge_train_data(self, batch):
 
         df_like_train = self.db_like_act.iloc[0:batch]
-        df_like_lfo = self.db_like_act.iloc[batch:]
-        data = self.pre.merge_over_like_credits(self.db_ini,
-                                                df_like_train, self.db_credits)
-        self.db_train_data = data
+        df_like_left = self.db_like_act.iloc[batch:]
+        df_train = self.pre.merge_over_like_credits(self.db_ini,
+                                                    df_like_train, self.db_credits)
 
-        print(data.columns)
+        print(df_train.columns)
 
-        return df_like_lfo
+        return df_train, df_like_left
 
     def get_4_random_movies(self):
 
         tb._SYMBOLIC_SCOPE.value = True
-
         sample = self.db_act.sample(4)
         sample = self.pre.merge_over_credits(sample, self.db_credits)
 
         # Hacemos las predicciones
-        X = self.pro.process(data=sample.copy(), train=False)
+        X = self.pro.process(data=sample.copy(), train_dev=False)
         pred, score = self.mod.predict(X)
         score = [int(round(s[0]*100)) for s in score]
         sample['prediction'] = score
@@ -91,8 +88,13 @@ class DBAppController:
 
         batch = 4
         if len(self.db_like_act) >= batch:
-            # Update db_like_act with leftover data over 16
-            self.db_like_act = self.merge_train_data(batch)
+            # Update db_like_act with leftover data over 4 and train model 1 epoch
+            train, left = self.merge_train_data(batch)
+            self.db_like_act = left
+            X_train = self.pro.process(data=train, train_dev=False)
+            y_train = train.like.values
+            tb._SYMBOLIC_SCOPE.value = True
+            self.mod.fit_model(X_train, y_train, 1, 4)
 
         self.sample = self.get_4_random_movies()
 
