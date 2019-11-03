@@ -9,39 +9,64 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_auc_score
 from tensorflow.python.client import device_lib
+from keras.layers import CuDNNGRU, GRU
+from keras.models import Model
+from keras.layers import Dropout, MaxPooling1D, Input
+from keras.layers import Embedding, SpatialDropout1D, BatchNormalization
+from keras.layers import GlobalMaxPooling1D
 
 
 class Modelling:
 
-    def __init__(self, max_len, vocab_size, model=None):
+    def __init__(self, vocab_size, max_len=60, model_path='models/'):
 
         self.max_len = max_len
         self.vocab_size = vocab_size
-        self.model = model
+        self.model = self.like_model_cpu(embedding_size=150, dropout=0.5, filters=64,
+                                         kernel=3, maxp=2, gnup=32, neurons=8,
+                                         act='gelu')
+        self.model.load_weights(model_path + 'my_model_movie_like.h5')
 
-    def taste_model(self, embedding_size, dropout, filters1,
-                    filters2, kernel, maxp, gnup, act):
+    def like_model_gpu(self, embedding_size, dropout, filters, kernel, maxp, gnup, neurons, act):
+        words = Input(shape=(self.max_len,))
+        em = Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
+        em = SpatialDropout1D(dropout)(em)
 
-        words = tf.keras.layers.Input(shape=(self.max_len,))
-        em = tf.keras.layers.Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
-        em = tf.keras.layers.SpatialDropout1D(dropout)(em)
+        c = MyLayers.my_conv1d(kernel, em, filters=filters, act=act)
+        m = MaxPooling1D(pool_size=maxp)(c)
+        d = Dropout(dropout)(m)
 
-        c = MyLayers.my_conv1d(1, em, filters=filters1, act=act)
-        d = tf.keras.layers.Dropout(dropout)(c)
+        gru = CuDNNGRU(gnup, kernel_initializer='glorot_uniform', return_sequences=True)(d)
+        gru = BatchNormalization()(gru)
+        gru = GlobalMaxPooling1D()(gru)
+        drop = Dropout(dropout)(gru)
 
-        c = MyLayers.my_conv1d(kernel, d, filters=filters2, act=act)
-        m = tf.keras.layers.MaxPooling1D(pool_size=maxp)(c)
-        d = tf.keras.layers.Dropout(dropout)(m)
+        pred = MyLayers.my_dense(neurons=neurons, ant=drop, act=act)
+        pred = MyLayers.my_dense(1, pred)
 
-        gru = tf.keras.layers.CuDNNGRU(gnup, kernel_initializer='glorot_uniform', return_sequences=True)(d)
-        gru = tf.keras.layers.BatchNormalization()(gru)
-        gru = tf.keras.layers.GlobalMaxPooling1D()(gru)
-        drop = tf.keras.layers.Dropout(dropout)(gru)
+        model = Model(inputs=words, outputs=pred)
 
-        pred = MyLayers.my_dense(1, drop)
+        return model
 
-        model = tf.keras.models.Model(inputs=words, outputs=pred)
-        self.model = model
+    def like_model_cpu(self, embedding_size, dropout, filters, kernel, maxp, gnup, neurons, act):
+        words = Input(shape=(self.max_len,))
+        em = Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
+        em = SpatialDropout1D(dropout)(em)
+
+        c = MyLayers.my_conv1d(kernel, em, filters=filters, act=act)
+        m = MaxPooling1D(pool_size=maxp)(c)
+        d = Dropout(dropout)(m)
+
+        gru = GRU(gnup, kernel_initializer='glorot_uniform', activation='tanh',
+                  recurrent_activation='sigmoid', return_sequences=True, reset_after=True)(d)
+        gru = BatchNormalization()(gru)
+        gru = GlobalMaxPooling1D()(gru)
+        drop = Dropout(dropout)(gru)
+
+        pred = MyLayers.my_dense(neurons=neurons, ant=drop, act=act)
+        pred = MyLayers.my_dense(1, pred)
+
+        model = Model(inputs=words, outputs=pred)
 
         return model
 
@@ -67,6 +92,8 @@ class Modelling:
             self.model = model
 
     def predict(self, X_test):
+        print("Dentro modelo \n")
+        print(X_test)
         y_score = self.model.predict(X_test, verbose=1)
         threshold = 0.5
 
@@ -74,8 +101,7 @@ class Modelling:
         y_pred[y_pred >= threshold] = 1
         y_pred[y_pred < threshold] = 0
 
-        self.y_pred = y_pred
-        return y_pred
+        return y_pred, y_score
 
     def evaluate(self, y_test, y_pred=None):
 

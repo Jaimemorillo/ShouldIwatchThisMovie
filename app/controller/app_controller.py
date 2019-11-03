@@ -1,7 +1,9 @@
 from like.preparation import Preparation
 from like.processing import Processing
+from like.modelling import Modelling
 import numpy as np
 import pandas as pd
+import keras.backend.tensorflow_backend as tb
 
 
 class DBAppController:
@@ -10,6 +12,7 @@ class DBAppController:
 
         self.pre = Preparation()
         self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path)
+        self.mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path)
         self.path = data_path
         self.db_ini = self.load_ini_db()
         self.db_like_ini = self.load_like_db()
@@ -66,12 +69,16 @@ class DBAppController:
 
     def get_4_random_movies(self):
 
+        tb._SYMBOLIC_SCOPE.value = True
+
         sample = self.db_act.sample(4)
         sample = self.pre.merge_over_credits(sample, self.db_credits)
 
         # Hacemos las predicciones
-        X = self.pro.process(data=sample, train=False)
-        # print(len(X))
+        X = self.pro.process(data=sample.copy(), train=False)
+        pred, score = self.mod.predict(X)
+        score = [int(round(s[0]*100)) for s in score]
+        sample['prediction'] = score
 
         return sample
 

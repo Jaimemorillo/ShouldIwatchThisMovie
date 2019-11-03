@@ -5,7 +5,7 @@ from nltk import word_tokenize
 from nltk.stem import SnowballStemmer
 import json
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.preprocessing.text import Tokenizer
+from keras.preprocessing.text import Tokenizer
 import pickle
 
 
@@ -16,6 +16,8 @@ class Processing:
         stop_words = pd.read_csv(stopwords_path + 'stopwords-es.txt', header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
+        self.n_words = 6000
+        self.max_len = 60
 
         try:
             self.stemmer = SnowballStemmer("spanish", ignore_stopwords=True)
@@ -147,7 +149,7 @@ class Processing:
 
         X = self.tokenizer.texts_to_sequences(overviews)
         # print(len(max(X, key=len)))
-        from tensorflow.keras.preprocessing.sequence import pad_sequences
+        from keras.preprocessing.sequence import pad_sequences
 
         # We pad the sentence for the left to fit with max_len
         X = pad_sequences(X, padding='pre', maxlen=max_len)
@@ -157,9 +159,6 @@ class Processing:
 
     def process(self, data, train):
 
-        n_words = 12000
-        max_len = 100
-
         df = self.clean_overview(data)
         df = self.paste_cast(df)
 
@@ -167,16 +166,16 @@ class Processing:
 
             X_train, X_test, y_train, y_test = self.split_data(df)
 
-            self.fit_tokenizer(X_train, n_words)
-            X_train = self.tokenize_overview(X_train, max_len)
-            X_test = self.tokenize_overview(X_test, max_len)
+            self.fit_tokenizer(X_train, self.n_words)
+            X_train = self.tokenize_overview(X_train, self.max_len)
+            X_test = self.tokenize_overview(X_test, self.max_len)
 
             return X_train, X_test
 
         else:
 
             X = df['overview'].values
-            X = self.tokenize_overview(X, max_len)
+            X = self.tokenize_overview(X, self.max_len)
 
             return X
 
