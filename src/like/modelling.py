@@ -22,13 +22,15 @@ class Modelling:
 
         self.max_len = max_len
         self.vocab_size = vocab_size
-        self.model = self.like_model_cpu(embedding_size=150, dropout=0.5, filters=64,
-                                         kernel=3, maxp=2, gnup=32, neurons=8,
-                                         act='gelu')
+        self.model = self.like_model_cpu(embedding_size=150, dropout=0.5,
+                                         filters=64, kernel=3,
+                                         maxp=2, gnup=32,
+                                         neurons=8, act='gelu')
         self.model.load_weights(model_path + 'my_model_movie_like.h5')
         self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
     def like_model_gpu(self, embedding_size, dropout, filters, kernel, maxp, gnup, neurons, act):
+
         words = Input(shape=(self.max_len,))
         em = Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
         em = SpatialDropout1D(dropout)(em)
@@ -43,13 +45,14 @@ class Modelling:
         drop = Dropout(dropout)(gru)
 
         pred = MyLayers.my_dense(neurons=neurons, ant=drop, act=act)
-        pred = MyLayers.my_dense(1, pred)
+        pred = MyLayers.my_dense(1, pred, act='sigmoid')
 
         model = Model(inputs=words, outputs=pred)
 
         return model
 
     def like_model_cpu(self, embedding_size, dropout, filters, kernel, maxp, gnup, neurons, act):
+
         words = Input(shape=(self.max_len,))
         em = Embedding(input_dim=self.vocab_size, output_dim=embedding_size)(words)
         em = SpatialDropout1D(dropout)(em)
@@ -65,7 +68,7 @@ class Modelling:
         drop = Dropout(dropout)(gru)
 
         pred = MyLayers.my_dense(neurons=neurons, ant=drop, act=act)
-        pred = MyLayers.my_dense(1, pred)
+        pred = MyLayers.my_dense(1, pred,act='sigmoid')
 
         model = Model(inputs=words, outputs=pred)
 

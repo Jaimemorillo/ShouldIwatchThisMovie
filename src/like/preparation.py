@@ -42,32 +42,13 @@ class Preparation:
 
         return like
 
-    def get_credits(self, credits_path):
+    def merge_over_like(self, over, like):
 
-        movie_credits = self.read_csv(credits_path)
-        movie_credits = movie_credits[['id', 'cast', 'crew']]
-
-        return movie_credits
-
-    def merge_over_credits(self, over, movie_credits):
-
-        data = over[['id', 'title', 'overview',
-                     'reduced_overview', 'prediction', 'like']]
-        data = data.merge(movie_credits[['cast', 'crew']], left_index=True, right_index=True)
-
-        return data
-
-
-    def merge_over_like_credits(self, over, like, movie_credits):
-
-        data = self.merge_over_credits(over, movie_credits)
-        data = data.drop(['like'], axis=1).merge(like.drop(['id'], axis=1),
+        data = over.drop(['like'], axis=1).merge(like.drop(['id'], axis=1),
                                                  left_index=True, right_index=True)
 
         # Clean  empty
         data = data[~pd.isna(data.overview)]
-        # data['like'] = data['like'].astype(int)
-        # data.reset_index(inplace=True, drop=True)
 
         return data
 

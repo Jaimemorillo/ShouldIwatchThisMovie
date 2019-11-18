@@ -18,7 +18,6 @@ class DBAppController:
         self.db_like_ini = self.load_like_db()
         self.db_like_act = pd.DataFrame(columns=['id', 'like'])
         self.db_act = self.db_ini[~self.db_ini.index.isin(self.db_like_ini.index)].copy()
-        self.db_credits = self.load_credits_db()
         self.__sample = self.get_4_random_movies()
 
     @property
@@ -31,7 +30,7 @@ class DBAppController:
 
     def load_ini_db(self):
 
-        movies_ini = self.pre.get_overview(self.path + 'tmdb_spanish_overview.csv')
+        movies_ini = self.pre.get_overview(self.path + 'tmdb_spanish_def.csv')
 
         movies_ini['reduced_overview'] = movies_ini['overview'].apply(
             lambda x: " ".join(x.split()[0:30] + ['...']))
@@ -39,29 +38,21 @@ class DBAppController:
         movies_ini['like'] = np.nan
 
         movies_ini = movies_ini[['id', 'title', 'overview',
-                                 'reduced_overview', 'prediction', 'like']]
+                                 'reduced_overview', 'prediction',
+                                 'cast', 'crew', 'like']]
         return movies_ini
 
     def load_like_db(self):
 
-        like_ini = self.pre.get_personal_like(self.path + 'tmdb_spanish_Jaime2.csv')
+        like_ini = self.pre.get_personal_like(self.path + 'tmdb_spanish_Jaime_def.csv')
 
         return like_ini
-
-    def load_credits_db(self):
-
-        credits_ini = self.pre.get_credits(self.path + 'tmdb_5000_credits.csv')
-
-        return credits_ini
 
     def merge_train_data(self, batch):
 
         df_like_train = self.db_like_act.iloc[0:batch]
         df_like_left = self.db_like_act.iloc[batch:]
-        df_train = self.pre.merge_over_like_credits(self.db_ini,
-                                                    df_like_train, self.db_credits)
-
-        print(df_train.columns)
+        df_train = self.pre.merge_over_like(self.db_ini, df_like_train)
 
         return df_train, df_like_left
 
@@ -69,7 +60,7 @@ class DBAppController:
 
         tb._SYMBOLIC_SCOPE.value = True
         sample = self.db_act.sample(4)
-        sample = self.pre.merge_over_credits(sample, self.db_credits)
+        print(sample)
 
         # Hacemos las predicciones
         X = self.pro.process(data=sample.copy(), train_dev=False)
@@ -88,10 +79,11 @@ class DBAppController:
 
         batch = 4
         if len(self.db_like_act) >= batch:
-            # Update db_like_act with leftover data over 4 and train model 1 epoch
+
             train, left = self.merge_train_data(batch)
             self.db_like_act = left
-            X_train = self.pro.process(data=train, train_dev=False)
+
+            X_train = self.pro.process(data=train.copy(), train_dev=False)
             y_train = train.like.values
             tb._SYMBOLIC_SCOPE.value = True
             self.mod.fit_model(X_train, y_train, 1, 4)

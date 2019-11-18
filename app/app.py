@@ -9,8 +9,8 @@ from controller.app_controller import DBAppController
 data_path = '../data/'
 models_path = '../models/'
 
-# db_ctrl = DBAppController()
-db_ctrl = DBAppController(data_path, models_path)
+db_ctrl = DBAppController()
+# db_ctrl = DBAppController(data_path, models_path)
 
 app = Flask(__name__)
 
