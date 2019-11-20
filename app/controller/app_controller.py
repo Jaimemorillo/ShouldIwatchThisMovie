@@ -11,8 +11,8 @@ class DBAppController:
     def __init__(self, data_path='data/', models_path='models/'):
 
         self.pre = Preparation()
-        self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path)
-        self.mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path)
+        self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path, max_len=80)
+        self.mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path, max_len=80)
         self.path = data_path
         self.db_ini = self.load_ini_db()
         self.db_like_ini = self.load_like_db()
@@ -60,7 +60,6 @@ class DBAppController:
 
         tb._SYMBOLIC_SCOPE.value = True
         sample = self.db_act.sample(4)
-        print(sample)
 
         # Hacemos las predicciones
         X = self.pro.process(data=sample.copy(), train_dev=False)

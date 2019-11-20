@@ -18,7 +18,7 @@ from keras.layers import GlobalMaxPooling1D
 
 class Modelling:
 
-    def __init__(self, vocab_size, max_len=60, model_path='models/'):
+    def __init__(self, vocab_size, max_len=80, model_path='models/'):
 
         self.max_len = max_len
         self.vocab_size = vocab_size

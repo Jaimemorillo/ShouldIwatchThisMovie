@@ -15,13 +15,13 @@ import nlpaug.flow as naf
 
 class Processing:
 
-    def __init__(self, stopwords_path='data/', tokenizer_path='models/'):
+    def __init__(self, stopwords_path='data/', tokenizer_path='models/', max_len=80):
         # It needs a stopwords file to init
         stop_words = pd.read_csv(stopwords_path + 'stopwords-es.txt', header=None)
         stop_words = stop_words[0].tolist() + ['secuela']
         self.stop_words = stop_words
         self.n_words = 8000
-        self.max_len = 80
+        self.max_len = max_len
         # self.aug = naf.Sequential([
         #    naw.ContextualWordEmbsAug(model_path='bert-base-multilingual-cased', action="insert", aug_p=0.1),
         #    naw.ContextualWordEmbsAug(model_path='bert-base-multilingual-cased', action="substitute", aug_p=0.9),
