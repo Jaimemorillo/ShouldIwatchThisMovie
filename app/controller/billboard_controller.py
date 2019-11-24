@@ -32,7 +32,7 @@ class DBBillboardController:
         movies_ini = self.pre.api_request_now_playing()
 
         movies_ini['reduced_overview'] = movies_ini['overview'].apply(
-            lambda x: " ".join(x.split()[0:30] + ['...']))
+            lambda x:  " ".join(x[0:150].split()[0:-1]) + '...')
         movies_ini['prediction'] = 80
         movies_ini['like'] = np.nan
 

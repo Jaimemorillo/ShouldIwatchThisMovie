@@ -119,6 +119,9 @@ class Preparation:
         }
 
         now_playing = pd.DataFrame(data=data)
+        now_playing['overview'] = now_playing['overview'].apply(lambda x: 'No tenemos una sinopsis en Español. '
+                                                                          'Ayúdamos a ampliar nuestra base de datos '
+                                                                          'añadiendo una.' if len(x) == 0 else x)
         now_playing['id'] = now_playing['id'].astype(int)
 
         now_playing.set_index('id', inplace=True)

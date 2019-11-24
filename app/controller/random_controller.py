@@ -33,7 +33,7 @@ class DBRandomController:
         movies_ini = self.pre.get_overview(self.path + 'tmdb_spanish_def.csv')
 
         movies_ini['reduced_overview'] = movies_ini['overview'].apply(
-            lambda x: " ".join(x.split()[0:30] + ['...']))
+            lambda x: " ".join(x[0:150].split()[0:-1]) + '...')
         movies_ini['prediction'] = 80
         movies_ini['like'] = np.nan
 

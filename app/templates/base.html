@@ -11,10 +11,10 @@
     <title>Should I Watch This Movie?</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Custom styles for this template -->
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/heroic-features.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/heroic-features.css') }}">
 
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/19e085bf59.js" crossorigin="anonymous"></script>
@@ -32,14 +32,24 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
+                    {% if 'random' in request.path %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('random')}}">Random
-                            <span class="sr-only">(current)</span>
-                        </a>
+                        <a class="nav-link" href="{{ url_for('random')}}">Random</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('random')}}">Random</a>
+                    </li>
+                    {% endif %}
+                    {% if 'nowplaying' in request.path %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('nowplaying')}}">Now Playing</a>
+                    </li>
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('nowplaying')}}">Now Playing</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">Search</a>
                     </li>
