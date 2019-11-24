@@ -53,7 +53,7 @@ class Preparation:
         return data
 
     @staticmethod
-    def api_request_by__id(movie_id):
+    def api_request_by_id(movie_id):
 
         movie = tmdb.Movies(movie_id)
 
@@ -98,14 +98,21 @@ class Preparation:
         ids = [i['id'] for i in results]
         casts = []
         crews = []
+        images = []
 
         for idx in ids:
             movie = tmdb.Movies(idx)
             cast = movie.credits()['cast']
             crew = movie.credits()['crew']
+            try:
+                image_path = movie.images()['posters'][0]['file_path']
+                image = 'https://image.tmdb.org/t/p/w200' + image_path
+            except:
+                image = 'http://placehold.it/500x450'
 
             casts = casts + [cast]
             crews = crews + [crew]
+            images = images + [image]
 
         data = {
             'id': ids,
@@ -115,7 +122,9 @@ class Preparation:
             'genres': [i['genre_ids'] for i in results],
             'cast': casts,
             'crew': crews,
-            'release_date': [i['release_date'] for i in results]
+            'image_path': images,
+            'release_date': [i['release_date'] for i in results],
+            'vote_average': [i['vote_average'] for i in results]
         }
 
         now_playing = pd.DataFrame(data=data)

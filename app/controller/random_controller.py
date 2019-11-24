@@ -12,7 +12,7 @@ class DBRandomController:
 
         self.pre = Preparation()
         self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path, max_len=80)
-        self.mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path, max_len=80)
+        self.__mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path, max_len=80)
         self.path = data_path
         self.db_ini = self.load_ini_db()
         self.db_like_ini = self.load_like_db()
@@ -24,9 +24,17 @@ class DBRandomController:
     def sample(self):
         return self.__sample
 
+    @property
+    def mod(self):
+        return self.__mod
+
     @sample.setter
     def sample(self, val):
         self.__sample = val
+
+    @mod.setter
+    def mod(self, val):
+        self.__mod = val
 
     def load_ini_db(self):
 
@@ -36,10 +44,11 @@ class DBRandomController:
             lambda x: " ".join(x[0:150].split()[0:-1]) + '...')
         movies_ini['prediction'] = 80
         movies_ini['like'] = np.nan
+        movies_ini['vote_average'] = movies_ini['vote_average'] * 10
 
         movies_ini = movies_ini[['id', 'title', 'overview',
-                                 'reduced_overview', 'prediction',
-                                 'cast', 'crew', 'like']]
+                                 'reduced_overview', 'prediction', 'cast',
+                                 'crew', 'vote_average', 'image_path', 'like']]
         return movies_ini
 
     def load_like_db(self):
@@ -65,7 +74,10 @@ class DBRandomController:
         X = self.pro.process(data=sample.copy(), train_dev=False)
         pred, score = self.mod.predict(X)
         score = [int(round(s[0]*100)) for s in score]
-        sample['prediction'] = score
+        sample['score'] = score
+        sample['prediction'] = round(sample['score']*0.7 + sample['vote_average']*0.3).astype(int)
+        print(sample['vote_average'])
+        print(sample['score'])
 
         return sample
 

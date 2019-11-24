@@ -8,11 +8,11 @@ import keras.backend.tensorflow_backend as tb
 
 class DBBillboardController:
 
-    def __init__(self, data_path='data/', models_path='models/'):
+    def __init__(self, model, data_path='data/', models_path='models/'):
 
         self.pre = Preparation()
         self.pro = Processing(stopwords_path=data_path, tokenizer_path=models_path, max_len=80)
-        self.mod = Modelling(vocab_size=self.pro.vocab_size, model_path=models_path, max_len=80)
+        self.mod = model
         self.path = data_path
         self.db_ini = self.load_ini_db()
         self.db_like_act = pd.DataFrame(columns=['id', 'like'])
@@ -35,10 +35,11 @@ class DBBillboardController:
             lambda x:  " ".join(x[0:150].split()[0:-1]) + '...')
         movies_ini['prediction'] = 80
         movies_ini['like'] = np.nan
+        movies_ini['vote_average'] = movies_ini['vote_average']*10
 
         movies_ini = movies_ini[['id', 'title', 'overview',
-                                 'reduced_overview', 'prediction',
-                                 'cast', 'crew', 'like']]
+                                 'reduced_overview', 'prediction', 'cast',
+                                 'crew', 'vote_average', 'image_path', 'like']]
         return movies_ini
 
     def merge_train_data(self, batch):
@@ -67,8 +68,9 @@ class DBBillboardController:
         # Hacemos las predicciones
         X = self.pro.process(data=sample.copy(), train_dev=False)
         pred, score = self.mod.predict(X)
-        score = [int(round(s[0]*100)) for s in score]
-        sample['prediction'] = score
+        score = [int(round(s[0] * 100)) for s in score]
+        sample['score'] = score
+        sample['prediction'] = round(sample['score'] * 0.7 + sample['vote_average'] * 0.3).astype(int)
 
         return sample
 

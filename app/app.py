@@ -10,9 +10,9 @@ from controller.billboard_controller import DBBillboardController
 data_path = '../data/'
 models_path = '../models/'
 
-# db_ctrl = DBAppController()
+# db_ctrl = DBRandomController()
 db_random_ctrl = DBRandomController(data_path, models_path)
-db_bb_ctrl = DBBillboardController(data_path, models_path)
+db_bb_ctrl = DBBillboardController(db_random_ctrl.mod, data_path, models_path)
 
 app = Flask(__name__)
 
