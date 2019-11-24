@@ -3,39 +3,37 @@ import numpy as np
 sys.path.append('app')
 sys.path.append('../src')
 
-from flask import Flask, render_template, url_for, request, abort, redirect
+from flask import Flask, render_template, request, abort, redirect, url_for
 
-from controller.app_controller import DBAppController
+from controller.random_controller import DBRandomController
+from controller.billboard_controller import DBBillboardController
 data_path = '../data/'
 models_path = '../models/'
 
 # db_ctrl = DBAppController()
-db_ctrl = DBAppController(data_path, models_path)
+db_random_ctrl = DBRandomController(data_path, models_path)
+db_bb_ctrl = DBBillboardController(data_path, models_path)
 
 app = Flask(__name__)
 
-# Home page
-@app.route('/')
-@app.route('/home',  methods=['GET', 'POST'])
-def home():
+
+def render_carrousel(controller):
     if request.method == 'GET':
         return render_template('home.html',
-                               ids=db_ctrl.sample.index.values, movies=db_ctrl.sample)
+                               ids=controller.sample.index.values, movies=controller.sample)
 
     elif request.method == 'POST':
-        db_ctrl.update_sample()
+        controller.update_sample()
         return render_template('home.html',
-                               ids=db_ctrl.sample.index.values, movies=db_ctrl.sample)
+                               ids=controller.sample.index.values, movies=controller.sample)
 
 
-# Movie page
-@app.route('/movie/<id>', methods=['GET', 'POST'])
-def movie(id):
+def render_movie_page(id, controller):
     if request.method == 'GET':
         id = int(id)
-        if db_ctrl.sample.title.get(id) is not None:
+        if controller.sample.title.get(id) is not None:
             return render_template('movie.html',
-                                   id=id, movies=db_ctrl.sample)
+                                   id=id, movies=controller.sample)
         else:
             abort(404)
 
@@ -47,19 +45,42 @@ def movie(id):
             value = request.form[key]
             value = int(value)
 
-            if db_ctrl.sample.loc[id, 'like'] == value:
-                db_ctrl.sample.loc[id, 'like'] = np.nan
+            if controller.sample.loc[id, 'like'] == value:
+                controller.sample.loc[id, 'like'] = np.nan
             else:
-                db_ctrl.sample.loc[id, 'like'] = value
+                controller.sample.loc[id, 'like'] = value
 
-            print(db_ctrl.sample.like)
+            print(controller.sample.like)
             return redirect(page)
 
         if request.form.get("like") is not None:
-            return set_like('like', '/home')
-
+            if 'random' in request.path:
+                return set_like('like', '/random')
+            else:
+                return set_like('like', '/nowplaying')
         else:
-            return set_like('like2', '/movie/' + str(id))
+            return set_like('like2', url_for(request.endpoint, id=str(id)))
+
+# Home page
+@app.route('/')
+@app.route('/random',  methods=['GET', 'POST'])
+def random():
+    return render_carrousel(db_random_ctrl)
+
+# Movie page
+@app.route('/random/movie/<id>', methods=['GET', 'POST'])
+def random_movie(id):
+    return render_movie_page(id, db_random_ctrl)
+
+
+@app.route('/nowplaying',  methods=['GET', 'POST'])
+def nowplaying():
+    return render_carrousel(db_bb_ctrl)
+
+# Movie page
+@app.route('/nowplaying/movie/<id>', methods=['GET', 'POST'])
+def nowplaying_movie(id):
+    return render_movie_page(id, db_bb_ctrl)
 
 
 if __name__ == '__main__':

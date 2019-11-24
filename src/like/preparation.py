@@ -52,7 +52,8 @@ class Preparation:
 
         return data
 
-    def api_request_by__id(self, movie_id):
+    @staticmethod
+    def api_request_by__id(movie_id):
 
         movie = tmdb.Movies(movie_id)
 
@@ -62,7 +63,8 @@ class Preparation:
             cast = movie.credits()['cast']
             crew = movie.credits()['crew']
 
-            return movie.id, movie.original_title, movie.title, movie.overview, movie.genres, cast, crew, movie.release_date
+            return movie.id, movie.original_title, movie.title, movie.overview, \
+                movie.genres, cast, crew, movie.release_date
 
         try:
 
@@ -86,3 +88,43 @@ class Preparation:
         except:
 
             print('Fallo en: ' + str(movie_id))
+
+    @staticmethod
+    def api_request_now_playing():
+
+        movies = tmdb.Movies("now_playing")
+        response = movies.info(language='es-ES')
+        results = response['results']
+        ids = [i['id'] for i in results]
+        casts = []
+        crews = []
+
+        for idx in ids:
+            movie = tmdb.Movies(idx)
+            cast = movie.credits()['cast']
+            crew = movie.credits()['crew']
+
+            casts = casts + [cast]
+            crews = crews + [crew]
+
+        data = {
+            'id': ids,
+            'original_title': [i['original_title'] for i in results],
+            'title': [i['title'] for i in results],
+            'overview': [i['overview'] for i in results],
+            'genres': [i['genre_ids'] for i in results],
+            'cast': casts,
+            'crew': crews,
+            'release_date': [i['release_date'] for i in results]
+        }
+
+        now_playing = pd.DataFrame(data=data)
+        now_playing['id'] = now_playing['id'].astype(int)
+
+        now_playing.set_index('id', inplace=True)
+
+        now_playing['id'] = now_playing.index
+
+        return now_playing
+
+

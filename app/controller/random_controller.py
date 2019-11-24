@@ -6,7 +6,7 @@ import pandas as pd
 import keras.backend.tensorflow_backend as tb
 
 
-class DBAppController:
+class DBRandomController:
 
     def __init__(self, data_path='data/', models_path='models/'):
 
@@ -85,7 +85,7 @@ class DBAppController:
             X_train = self.pro.process(data=train.copy(), train_dev=False)
             y_train = train.like.values
             tb._SYMBOLIC_SCOPE.value = True
-            self.mod.fit_model(X_train, y_train, 1, 4)
+            self.mod.fit_model(X_train, y_train, epochs=1, batch_size=4)
 
         self.sample = self.get_4_random_movies()
 
