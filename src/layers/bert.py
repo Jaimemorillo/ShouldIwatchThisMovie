@@ -15,36 +15,19 @@ class Bert:
         self.max_seq_length = max_seq_length
 
     class PaddingInputExample(object):
-        """Fake example so the num input examples is a multiple of the batch size.
-      When running eval/predict on the TPU, we need to pad the number of examples
-      to be a multiple of the batch size, because the TPU requires a fixed batch
-      size. The alternative is to drop the last batch, which is bad because it means
-      the entire output data won't be generated.
-      We use this class instead of `None` because treating `None` as padding
-      battches could cause silent errors.
-      """
+        """Fake example """
 
     class InputExample(object):
-        """A single training/test example for simple sequence classification."""
 
         def __init__(self, guid, text_a, text_b=None, label=None):
-            """Constructs a InputExample.
-        Args:
-          guid: Unique id for the example.
-          text_a: string. The untokenized text of the first sequence. For single
-            sequence tasks, only this sequence must be specified.
-          text_b: (Optional) string. The untokenized text of the second sequence.
-            Only must be specified for sequence pair tasks.
-          label: (Optional) string. The label of the example. This should be
-            specified for train and dev examples, but not for test examples.
-        """
+
             self.guid = guid
             self.text_a = text_a
             self.text_b = text_b
             self.label = label
 
     def create_tokenizer_from_hub_module(self):
-        """Get the vocab file and casing info from the Hub module."""
+
         bert_module = hub.Module(self.bert_path)
         tokenization_info = bert_module(signature="tokenization_info", as_dict=True)
         vocab_file, do_lower_case = self.sess.run(
@@ -57,7 +40,6 @@ class Bert:
         return FullTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
 
     def convert_single_example(self, tokenizer, example, max_seq_length=256):
-        """Converts a single `InputExample` into a single `InputFeatures`."""
 
         if isinstance(example, self.PaddingInputExample):
             input_ids = [0] * max_seq_length
@@ -99,7 +81,6 @@ class Bert:
         return input_ids, input_mask, segment_ids, example.label
 
     def convert_examples_to_features(self, tokenizer, examples, max_seq_length=256):
-        """Convert a set of `InputExample`s to a list of `InputFeatures`."""
 
         input_ids, input_masks, segment_ids, labels = [], [], [], []
         for example in tqdm_notebook(examples, desc="Converting examples to features"):
@@ -118,7 +99,7 @@ class Bert:
         )
 
     def convert_text_to_examples(self, texts, labels):
-        """Create InputExamples"""
+
         InputExamples = []
         for text, label in zip(texts, labels):
             InputExamples.append(

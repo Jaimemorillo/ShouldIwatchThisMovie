@@ -25,12 +25,12 @@ Solving and NLP Binary Classification problem training a neural network using th
 
 The following nlp techniques have been applied:
 
-- Normalization and erase of stopwords
-- Stemming
-- Tokenization
-- Text Augmentation
-- Word2Vec Emmbedings
-- CNN and RNN
+- Normalization and erasing of stopwords.
+- Stemming.
+- Tokenization.
+- Text Augmentation.
+- Word2Vec Emmbedings.
+- CNN and RNN.
 
 ## How to use
 

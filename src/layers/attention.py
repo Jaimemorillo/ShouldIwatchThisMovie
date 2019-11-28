@@ -1,23 +1,7 @@
 import tensorflow as tf
 
+
 class AttentionWithContext(tf.keras.layers.Layer):
-    """
-        Attention operation, with a context/query vector, for temporal data.
-        Supports Masking.
-        Follows the work of Yang et al. [https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf]
-        "Hierarchical Attention Networks for Document Classification"
-        by using a context vector to assist the attention
-        # Input shape
-            3D tensor with shape: `(samples, steps, features)`.
-        # Output shape
-            2D tensor with shape: `(samples, features)`.
-        :param kwargs:
-        Just put it on top of an RNN Layer (GRU/LSTM/SimpleRNN) with return_sequences=True.
-        The dimensions are inferred based on the output shape of the RNN.
-        Example:
-            model.add(LSTM(64, return_sequences=True))
-            model.add(AttentionWithContext())
-        """
 
     def __init__(self,
                  W_regularizer=None, u_regularizer=None, b_regularizer=None,
@@ -100,9 +84,6 @@ class AttentionWithContext(tf.keras.layers.Layer):
 
     def compute_output_shape(self, input_shape):
         if self.return_attention:
-            #TODO use TensorShape here, as done in the else statement.   I'm not sure
-            # if this is returning a single tensor, or a list of two so leaving this undone for now.  Suspect this will
-            # need to complete if using Sequential rather than Functional API
             return [(input_shape[0], input_shape[-1]),
                     (input_shape[0], input_shape[1])]
         else:

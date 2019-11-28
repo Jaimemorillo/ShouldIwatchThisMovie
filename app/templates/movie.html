@@ -11,9 +11,19 @@
         </div>
     </div>
     <div class="card-footer text-center">
-        <div class="card my-3">
+        {% if  50 > movies.prediction[id] %}
+        <div class="card my-3 text-danger">
             {{ movies.prediction[id] }}
         </div>
+        {% elif movies.prediction[id] >=50 and 70> movies.prediction[id]%}
+        <div class="card my-3 text-warning">
+            {{ movies.prediction[id] }}
+        </div>
+        {% else %}
+        <div class="card my-3 text-success">
+            {{ movies.prediction[id] }}
+        </div>
+        {% endif %}
         <div class="row text-justify ml-5">
             <div class="col-lg-4 col-md-2"></div>
             <form action="{{ url_for(request.endpoint, id=id)}}" method="POST" class="mr-4">
