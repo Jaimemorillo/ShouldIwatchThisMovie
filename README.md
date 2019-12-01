@@ -9,9 +9,12 @@ In this repository I will place my TFG application, which helps people to find i
 ## Contact
 
 - E-mail: j.morillol@alumnos.urjc.es.
+
 - Github: [Jaimemorillo](https://github.com/Jaimemorillo).
 
-## About the project:
+  
+
+## About the project
 
 ### Topic
 
@@ -26,11 +29,18 @@ Solving and NLP Binary Classification problem training a neural network using th
 The following nlp techniques have been applied:
 
 - Normalization and erasing of stopwords.
+
 - Stemming.
+
 - Tokenization.
+
 - Text Augmentation.
+
 - Word2Vec Emmbedings.
+
 - CNN and RNN.
+
+  
 
 ## How to use
 
@@ -41,6 +51,22 @@ The following nlp techniques have been applied:
   ```
 
 - Go to http://127.0.0.1:5000/
+
+### App Characteristics
+
+- Movie labeling.
+
+- Read the synopsis.
+
+- See the posters.
+
+- Random movie generador.
+
+- Actual Billboard.
+
+- Automatic model training and prediction (real time).
+
+  
 
 ## Demo
 
