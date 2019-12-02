@@ -52,7 +52,7 @@ The following nlp techniques have been applied:
 
 - Go to http://127.0.0.1:5000/
 
-### App Characteristics
+### What can you do?
 
 - Movie labeling.
 
@@ -60,9 +60,9 @@ The following nlp techniques have been applied:
 
 - See the posters.
 
-- Random movie generador.
+- See random movie generated.
 
-- Actual Billboard.
+- See the actual Billboard.
 
 - Automatic model training and prediction (real time).
 
