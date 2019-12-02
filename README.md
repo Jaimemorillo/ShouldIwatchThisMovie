@@ -52,7 +52,7 @@ The following nlp techniques have been applied:
 
 - Go to http://127.0.0.1:5000/
 
-### What can you do?
+#### What can you do?
 
 - Movie labeling.
 
@@ -60,7 +60,7 @@ The following nlp techniques have been applied:
 
 - See the posters.
 
-- See random movie generated.
+- See random movies generated.
 
 - See the actual Billboard.
 
