@@ -201,11 +201,11 @@ As it is the translation of the ``Resumen'', which is supposed to be written at 
 
 \cleardoublepage
 \chapter{Introducción}
-\label{sec:intro} % etiqueta para poder referenciar luego en el texto con ~\ref{sec:intro}
+\label{chap:introduccion} % etiqueta para poder referenciar luego en el texto con ~\ref{sec:intro}
 \pagenumbering{arabic} % para empezar la numeración de página con números
 
 \section{Presentación}
-\label{sec:seccion}
+\label{sec:presentacion}
 
 Este proyecto nace en la idea de priorizar el contenido audiovisual que consumimos de manera personalizada y única para cada usuario, con del auge de las plataformas de vídeo en streaming la cantidad de películas y series que tenemos a nuestro alcance se ha disparado, Netflix, líderes del mercado en la actualidad, cuenta con 32.600 horas de vídeo según The Times\footnote{\url{https://www.thetimes.co.uk/article/netflix-shows-would-take-you-four-years-to-watch-bcksqb7b0}}, lo que vendría a ser el equivalente a 4 años de visionado ininterrumpido.
 
@@ -213,83 +213,31 @@ Las propias empresas de distribución cuentan con sus algoritmos de recomendaci�
 
 Lo más habitual para elegir película ha sido siempre porque te ha llamado la atención el tráiler que pusieron en televisión, por la sinopsis que leísta en una página de internet, por el póster de la cartelera o porque te lo recomendó ese amigo en el que confías. Al final lo que ocurre es que la gente va a ver siempre las mismas películas aquellas que más dinero invierten en publicidad y aparecen primero en todos los listados, de esta forma se acaban escapando de tu alcance muchas otras películas menos conocidas que por su contenido te podrían llegar a gustar.
 
-Por lo tanto la necesidad final del proyecto viene motivada por la imposibilidad que existe de visionar todos los tráileres o leer todas las sinopsis para encontrar aquello desconocido y disponer así de una herramienta que te permita localizar todas las cintas más afines a ti sin ningún tipo de sesgo ni esfuerzo, únicamente teniendo en cuenta los gustos de la propia persona y su experiencia de visionado pasada.
-
-\subsection{Estilo}
-\label{subsec:estilo}
-
-Lee sobre el uso de las comas\footnote{\url{http://narrativabreve.com/2015/02/opiniones-de-un-corrector-de-estilo-11-recetas-para-escribir-correctamente-la-coma.html}}. 
-Las comas en español no se ponen al tuntún.
-Y nunca, nunca entre el objeto y el predicado (p.ej. en ``Yo, hago el TFG'' sobre la coma).
-
-A continuación, viene una figura, la Figura~\ref{figura:foro_hilos}. 
-Observarás que el texto dentro de la referencia es el identificador de la figura (que se corresponden con el ``label'' dentro de la misma). 
-También habrás tomado nota de cómo se ponen las ``comillas dobles'' para que se muestren correctamente. 
-Nota que hay unas comillas de inicio (``) y otras de cierre (''), y que son diferentes.
-Volviendo a las referencias, nota que al compilar, la primera vez se crea un diccionario con las referencias, y en la segunda compilación se ``rellenan'' estas referencias. 
-Por eso hay que compilar dos veces tu memoria.
-Si no, no se crearán las referencias.
-
- \begin{figure}
-    \centering
-    \includegraphics[bb=0 0 800 600, width=12cm, keepaspectratio]{img/foro1}
-    \caption{Página con enlaces a hilos}
-    \label{figura:foro_hilos}
- \end{figure}
-
-A continuación un bloque ``verbatim'', que se utiliza para mostrar texto tal cual.
-Se puede utilizar para ofrecer el contenido de correos electrónicos, código, entre otras cosas.
-
-{\footnotesize
-\begin{verbatim}
-    From gaurav at gold-solutions.co.uk  Fri Jan 14 14:51:11 2005
-    From: gaurav at gold-solutions.co.uk (gaurav_gold)
-    Date: Fri Jan 14 19:25:51 2005
-    Subject: [Mailman-Users] mailman issues
-    Message-ID: <003c01c4fa40$1d99b4c0$94592252@gaurav7klgnyif>
-
-    Dear Sir/Madam,
-    How can people reply to the mailing list?  How do i turn off
-    this feature? How can i also enable a feature where if someone
-    replies the newsletter the email gets deleted?
-    Thanks
-
-    From msapiro at value.net  Fri Jan 14 19:48:51 2005
-    From: msapiro at value.net (Mark Sapiro)
-    Date: Fri Jan 14 19:49:04 2005
-    Subject: [Mailman-Users] mailman issues
-    In-Reply-To: <003c01c4fa40$1d99b4c0$94592252@gaurav7klgnyif>
-    Message-ID: <PC173020050114104851057801b04d55@msapiro>
-
-    gaurav_gold wrote:
-    >How can people reply to the mailing list?  How do i turn off
-    this feature? How can i also enable a feature where if someone
-    replies the newsletter the email gets deleted?
-
-    See the FAQ
-    >Mailman FAQ: http://www.python.org/cgi-bin/faqw-mm.py
-    article 3.11
-\end{verbatim}
-}
+Por lo tanto la necesidad final del proyecto viene motivada por la imposibilidad que existe de visionar todos los tráileres o leer todas las sinopsis para encontrar aquello ``desconocido'' y disponer así de una herramienta que te permita localizar todas las cintas más afines a ti sin ningún tipo de sesgo ni esfuerzo, únicamente teniendo en cuenta los gustos de la propia persona y su experiencia de visionado pasada.
 
 \section{Estructura de la memoria}
 \label{sec:estructura}
 
-En esta sección se debería introducir la esctura de la memoria. 
-
-Así:
+La memoria se estructura de la siguiente forma:
 
 \begin{itemize}
-  \item En el primer capítulo se hace una intro al proyecto.
+  \item \textbf{Capítulo \ref{chap:introduccion}. Introducción}: en el primer capítulo se hace una introducción al proyecto, presentando la contextualización y estructura del mismo, así como un conjunto de conceptos previos a conocer para la comprensión de la memoria.
   
-  \item En el capítulo~\ref{chap:objetivos} (ojo, otra referencia automática) se muestran los objetivos del proyecto.
+  \item \textbf{Capítulo \ref{chap:objetivos}. Objetivos}: se plantean los objetivos a lograr con la realización del proyecto.
   
-  \item A continuación se presenta el estado del arte en el capítulo~\ref{chap:estado}.
+  \item \textbf{Capítulo \ref{chap:estado}. Estado del arte}: Se presentan las distintas herramientas existentes que se han utilizado para el desarrollo de la herramienta.
   
   \item \ldots
 \end{itemize}
 
+\section{Conceptos previos}
+\label{sec:conceptos_previos}
+Es necesario explicar e introducir una serie de conceptos que se van a emplear durante el resto de la memoria, a saber:
+\subsection{Redes neuronales}
+\label{sec:redes_neuronales}
 
+\subsection{Perceptrón}
+\label{sec:perceptron}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -303,26 +251,31 @@ Así:
 \section{Objetivo general} % título de sección (se muestra)
 \label{sec:objetivo-general} % identificador de sección (no se muestra, es para poder referenciarla)
 
-Aquí vendría el objetivo general en una frase:
-Mi trabajo fin de grado consiste en crear de una herramienta de análisis de los comentarios jocosos en repositorios de software libre alojados en la plataforma GitHub.
-
-Recuerda que los objetivos siempre vienen en infinitivo.
-
+Mi trabajo fin de grado consiste en crear una herramienta de selección y búsqueda de películas afines al usuario que se pueda acceder mediante navegador y utilizando tecnologías de NLP (Natural Language Processing) y redes neuronales, adquiriendo durante el proceso nuevo conocimiento y formación en este campo. Se va a dar una probabilidad de afinidad para cada película que se va a obtener mediante la resolución de un problema de clasificación binaria empleando un conjunto de sinopsis que han sido previamente etiquetadas como películas afines o no afines, en este caso por mí como posible usuario final.
 
 \section{Objetivos específicos}
 \label{sec:objetivos-especificos}
 
-Los objetivos específicos se pueden entender como las tareas en las que se ha desglosado el objetivo general.
-Y, sí, también vienen en infinitivo.
+El objetivo principal se desglosa los siguientes objetivos específicos:
+\begin{itemize}
+  \item Explorar las posibles fuentes de datos e información a utilizar y etiquetar un conjunto de películas iniciales para el entrenamiento de una primera red neuronal densa sencilla.
+  
+  \item Probar diferentes alternativas de codificación y técnicas sobre el texto de las sinopsis para mejorar el performance de la red.
+  
+  \item Construir emmbeding sobre el vector construido finalmente con las técnicas anteriores y utilizar una arquitectura convolucional sobre el mismo.
+  
+  \item Explorar arquitecturas más propias para NLP, convoluciones 1D, RNN \ldots
+  
+  \item \ldots
+\end{itemize}
 
 
-\section{Planificación temporal}
-\label{sec:planificacion-temporal}
+\section{Alternaticas}
+\label{sec:alternativas}
+A pesar de que se ha optado por dar la recomendación empleando redes neuronales, existen otras alternativas que vamos a detallar a continuación:
 
-A mí me gusta que aquí pongáis una descripción de lo que os ha llevado realizar el trabajo.
-Hay gente que añade un diagrama de GANTT.
-Lo importante es que quede claro cuánto tiempo llevas (tiempo natural, p.ej., 6 meses) y a qué nivel de esfuerzo (p.ej., principalmente los fines de semana).
-
+\subsection{Filtrado colaborativo}
+\label{sec:filtrado_colaborativo}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -333,6 +286,25 @@ Lo importante es que quede claro cuánto tiempo llevas (tiempo natural, p.ej., 6
 \chapter{Estado del arte}
 \label{chap:estado}
 
+Para la ejecución del proyecto se han usado múltiple tecnologías, librerías y técnicas ya existentes que se detallan a continuación:
+
+\section{Python} 
+\label{sec:python}
+
+\section{Keras} 
+\label{sec:keras}
+Keras \footnote{\url{https://keras.io/}} es una biblioteca de redes neuronales de código abierto escrita en Python, es capaz de correr encima de Tensorflow \footnote{\url{https://www.tensorflow.org/}}, CNTK \footnote{\url{https://docs.microsoft.com/en-us/cognitive-toolkit/}} o Theano\footnote{\url{http://deeplearning.net/software/theano/}}. Está diseñada para experimentar con redes neuronales de manera ágil y sencilla, es amigable para el usuario y totalmente modular, permitiendo combinar diferentes tipos de redes  convolucionales, recurrentes o mezclas de ambas. Keras recomienda utilizar el backed de Tensorflow que se encuentra actualmente en su versión 2.
+
+Keras contiene múltiples implementaciones de los bloques típicos que se emplean en redes neuronales: capas, funciones de activación, funciones objetivo y optimizadores que se colocan como si de piezas de puzle se trataran.
+
+\section{Pandas} 
+\label{sec:pandas}
+
+\section{Flask} 
+\label{sec:flask}
+
+
+%%%%%%%%%%%%
 Descripción de las tecnologías que utilizas en tu trabajo. 
 Con dos o tres párrafos por cada tecnología, vale. 
 Se supone que aquí viene todo lo que no has hecho tú.
