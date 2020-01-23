@@ -233,11 +233,41 @@ La memoria se estructura de la siguiente forma:
 \section{Conceptos previos}
 \label{sec:conceptos_previos}
 Es necesario explicar e introducir una serie de conceptos que se van a emplear durante el resto de la memoria, a saber:
-\subsection{Redes neuronales}
-\label{sec:redes_neuronales}
 
 \subsection{Perceptrón}
 \label{sec:perceptron}
+El perceptrón es el bloque básico de construcción de las redes neuronales, el equivalente biológico sería la neurona de nuestro cerebro, de ahí que se conozca también con ese nombre. La neurona recibe múltiples entradas $x_i$, las multiplica por unos pesos $w_i$, les aplica una función matemática $f$ y devuelve una salida $y$. Matemáticamente queda representado:
+\begin{figure}
+  \centering
+  \includegraphics[width=7cm, keepaspectratio]{img/neuron}
+  \caption{Estructura de un perceptrón}
+  \label{fig:neuron}
+\end{figure}
+\begin{equation}
+ y = f({ \sum_{k=1}^{n} x_i w_i})
+\end{equation}
+Esta función se conoce como función de activación, las tres más utilizadas en la actualidad son:
+\begin{itemize}
+  \item Sigmoide: La función sigmoide o logistica se define como $f(x) = \frac{1}{1+e^{-x}}$. Nos ayuda a capturar las no linearidades de los datos y es diferenciable, lo que implica que pueda usarse con el descenso del gradiente y la  propagación hacia atrás, mecanismos que se usan para el calculo de los pesos de las neuronas.
+  \item Tanh: La $tanh(x)$ es una función idéntica a la sigmoide pero devolviendo una salida entre el intervalo [-1,1] .
+  \item Relu: \emph{Rectified Linear Unit} es la función más usada en casi todas las neuronas, si recibe un valor negativo devuelve 0 y si el valor es positivo devuelve el propio valor: $f(x) = max(0,x)$. El rendimiento que ofrece es mayor que el de las dos funciones anteriores.
+  
+\end{itemize}
+
+\subsection{Red neuronal}
+\label{sec:red_neuronal}
+Las redes neuronales son uno de los algoritmos de machine learning más populares del momento, como su nombre indica están inspiradas en las conexiones que tienen las neuronas de nuestro cerebro, están formadas por varias neuronas que se disponen formando capas, las neuronas de cada capa comparten la misma función de activación pero cada capa puede tener una diferente, la estructura del la red siempre está formada por una capa de entrada (input layer), una o varias capas ocultas (hidden layers) y una capa de salida (output layer).
+
+Cuando la red se entrena cada una de las neuronas van aprendiendo sus pesos mediante un algoritmo conocido como propagación hacia atrás (backpropagation).
+Las redes neuronales con más de una capa oculta se conocen como redes profundas y dependiendo de la tipología de estas capas la red puede tomar diferentes nombres: red convolucional o red recurrente, cuyo funcionamiento iremos viendo más detalladamente a lo largo de la memoria.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=8cm, keepaspectratio]{img/red_neuronal.jpg}
+  \caption{Estructura de una red neuronal}
+  \label{fig:neural_network}
+\end{figure}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
