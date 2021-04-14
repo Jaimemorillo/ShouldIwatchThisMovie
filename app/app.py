@@ -1,7 +1,6 @@
 import sys
 import numpy as np
 sys.path.append('app')
-sys.path.append('../src')
 
 from flask import Flask, render_template, request, abort, redirect, url_for
 
