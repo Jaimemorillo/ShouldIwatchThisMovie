@@ -6,8 +6,8 @@ from flask import Flask, render_template, request, abort, redirect, url_for
 
 from controller.random_controller import DBRandomController
 from controller.billboard_controller import DBBillboardController
-data_path = '../data/'
-models_path = '../models/'
+data_path = 'data/'
+models_path = 'models/'
 
 # db_ctrl = DBRandomController()
 db_random_ctrl = DBRandomController(data_path, models_path)
