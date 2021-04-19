@@ -34,8 +34,6 @@ The following nlp techniques have been applied:
 
 - Tokenization.
 
-- Text Augmentation.
-
 - Word2Vec Emmbedings.
 
 - CNN and RNN.
