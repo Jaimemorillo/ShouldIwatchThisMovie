@@ -9,6 +9,7 @@ install:
   - pip install -U pytest
   - pip install -U pandas
   - pip install -U tensorflow
+  - pip install -U nltk
   - pip install codecov
 script: python test.py # run tests
 after_success:
