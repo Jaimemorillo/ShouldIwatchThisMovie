@@ -4,10 +4,11 @@ python:
   - 3.6
 before_install:
   - python --version
-  - python -m unittest
 install:
   - pip install -U pip
   - pip install -U pytest
+  - pip install -U pandas
+  - pip install -U tensorflow
   - pip install codecov
 script: test.py # run tests
 after_success:
