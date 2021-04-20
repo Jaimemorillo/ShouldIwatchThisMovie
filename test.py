@@ -15,9 +15,9 @@ import pandas as pd
 import numpy as np
 import methods as f
 
-original_df = 'gdrive/My Drive/TFG/overviews_final.csv'
-stop_words_df = 'gdrive/My Drive/TFG/stopwords-es.txt'
-testing_df = 'gdrive/My Drive/TFG/overviews_testing.csv'
+original_df = 'data/overviews_final.csv'
+stop_words_df = 'data/stopwords-es.txt'
+testing_df = 'data/overviews_testing.csv'
 
 class TestDataset(unittest.TestCase):
 
