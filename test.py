@@ -41,7 +41,7 @@ class TestDataset(unittest.TestCase):
     '''Test case function for empty overview'''
     self.assertFalse(any(x == True for x in self.df['n_words']<5))
 
-unittest.main(argv=[''], defaultTest='TestDataset', verbosity=2)
+#unittest.main(argv=[''], defaultTest='TestDataset', verbosity=2)
 
 class TestPreprocessing(unittest.TestCase):
 
@@ -65,7 +65,7 @@ class TestPreprocessing(unittest.TestCase):
     words = self.new_sentece.split(' ')
     self.assertFalse(any([word for word in words if word in stop_words]))
 
-unittest.main(argv=[''], defaultTest='TestPreprocessing', verbosity=2)
+#unittest.main(argv=[''], defaultTest='TestPreprocessing', verbosity=2)
 
 class TestSplit(unittest.TestCase):
 
@@ -90,7 +90,7 @@ class TestSplit(unittest.TestCase):
     prop_test = round(self.y_test.value_counts(normalize=True)[1], 1)
     self.assertEqual(prop_train, prop_test)
 
-unittest.main(argv=[''], defaultTest='TestSplit', verbosity=2)
+#unittest.main(argv=[''], defaultTest='TestSplit', verbosity=2)
 
 class TestTokenize(unittest.TestCase):
 
@@ -110,7 +110,7 @@ class TestTokenize(unittest.TestCase):
     '''Test case function for vocab size'''
     self.assertEqual(np.amax(self.X_train), self.vocab_size - 1)
 
-unittest.main(argv=[''], defaultTest='TestTokenize', verbosity=2)
+#unittest.main(argv=[''], defaultTest='TestTokenize', verbosity=2)
 
 class TestModel(unittest.TestCase):
 
@@ -145,4 +145,26 @@ class TestModel(unittest.TestCase):
     self.assertTrue((0<=max_pred<=1) and (0<=min_pred<=1))
     self.assertEqual(len(y_pred), len(self.y_test))
 
-unittest.main(argv=[''], defaultTest='TestModel', verbosity=2)
+#unittest.main(argv=[''], defaultTest='TestModel', verbosity=2)
+
+def run_tests():
+    # Run only the tests in the specified classes
+
+    test_classes_to_run = [TestDataset, TestPreprocessing, TestSplit, TestTokenize, TestModel]
+
+    loader = unittest.TestLoader()
+
+    suites_list = []
+    for test_class in test_classes_to_run:
+        suite = loader.loadTestsFromTestCase(test_class)
+        suites_list.append(suite)
+
+    big_suite = unittest.TestSuite(suites_list)
+
+    runner = unittest.TextTestRunner()
+    results = runner.run(big_suite)
+
+    # ...
+
+if __name__ == '__main__':
+    run_some_tests()
