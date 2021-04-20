@@ -29,7 +29,6 @@ class TestDataset(unittest.TestCase):
     '''Test case function for label column'''
     self.assertTrue('like' in self.df.columns)
     self.assertTrue('overview' in self.df.columns)
-    self.assertTrue(False)
 
   def test_enough_labels(self):
     '''Test case function for enough labels'''
