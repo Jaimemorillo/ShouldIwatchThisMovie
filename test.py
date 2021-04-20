@@ -161,7 +161,7 @@ def run_tests():
 
     big_suite = unittest.TestSuite(suites_list)
 
-    runner = unittest.TextTestRunner()
+    runner = unittest.TextTestRunner(verbosity=2)
     results = runner.run(big_suite)
 
     # ...
