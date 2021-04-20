@@ -11,6 +11,8 @@ install:
   - pip install -U tensorflow
   - pip install -U keras
   - pip install -U nltk
+  - pip install -U matplotlib
+  - pip install -U seaborn
   - pip install codecov
 script: python test.py # run tests
 after_success:
