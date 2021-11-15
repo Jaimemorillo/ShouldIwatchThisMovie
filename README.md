@@ -4,7 +4,7 @@
 
 
 
-In this repository I will place my TFG application, which helps people to find interesting movies to see in a different way to traditional recommendation systems.
+In this repository I will place my TFG Software application, which helps people to find interesting movies to see in a different way to traditional recommendation systems.
 
 ## Contact
 
