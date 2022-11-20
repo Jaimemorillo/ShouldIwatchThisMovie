@@ -1,6 +1,6 @@
 ***by @jaimemorillo***
 
-# Should I Watch This Movie?
+# Automatic Prediction of Affinity to a Movie from the Synopsis
 
 
 
