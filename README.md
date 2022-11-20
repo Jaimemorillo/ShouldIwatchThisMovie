@@ -4,13 +4,13 @@
 
 
 
-In this repository I will place my TFG Software application, which helps people to find interesting movies in a different way to traditional recommendation systems.
+In this repository I will place my TFG (Thesis) Software application, which helps people to find interesting movies in a different way to traditional recommendation systems.
 
 ## Contact
 
-- E-mail: j.morillol@alumnos.urjc.es.
+- E-mail: jamorillo.leal@gmail.com
 
-- Github: [Jaimemorillo](https://github.com/Jaimemorillo).
+- Github: [Jaimemorillo](https://github.com/Jaimemorillo)
 
   
 
