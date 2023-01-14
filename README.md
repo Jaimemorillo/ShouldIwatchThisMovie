@@ -22,7 +22,7 @@ Web application that shows you movies and their scoring based on your personal t
 
 ### How is it done
 
-Solving and NLP Binary Classification problem training a neural network using the synopsis of the movies (in Spanish).
+Solving an NLP Binary Classification problem training a neural network using the synopsis of the movies (in Spanish).
 
 ### Techniques
 
